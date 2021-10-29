@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\iTechArtPizzaTask.Core\iTechArtPizzaTask.Core.csproj" />
+    <ProjectReference Include="..\iTechArtPizzaTask\iTechArtPizzaTask.WebUI.csproj" />
+  </ItemGroup>
+
 </Project>

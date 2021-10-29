@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\iTechArtPizzaTask.Core\iTechArtPizzaTask.Core.csproj" />
   </ItemGroup>
 
 </Project>

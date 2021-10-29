@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iTechArtPizzaTask", "iTechArtPizzaTask\iTechArtPizzaTask.csproj", "{A4EFFC68-0D06-4AD2-AB12-6D4C214ED0C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iTechArtPizzaTask.WebUI", "iTechArtPizzaTask\iTechArtPizzaTask.WebUI.csproj", "{A4EFFC68-0D06-4AD2-AB12-6D4C214ED0C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iTechArtPizzaTask.Core", "iTechArtPizzaTask.Core\iTechArtPizzaTask.Core.csproj", "{2272B3F8-6899-442C-9818-0E57253A70BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTechArtPizzaTask.Infrastructure", "iTechArtPizzaTask.Infrastructure\iTechArtPizzaTask.Infrastructure.csproj", "{B75E9FEF-3E1F-4A53-8143-9D58EAC104C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iTechArtPizzaTask.Infrastructure", "iTechArtPizzaTask.Infrastructure\iTechArtPizzaTask.Infrastructure.csproj", "{B75E9FEF-3E1F-4A53-8143-9D58EAC104C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
