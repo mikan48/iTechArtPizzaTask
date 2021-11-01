@@ -10,5 +10,8 @@ namespace iTechArtPizzaTask.Core.Models
     {
         public int OrderId { get; set; }
         public OrderStatuses Status { get; set; }
+        public int UserId { get; set; } //FK_userId
+        public User User { get; set; }
+        public List<Pizza> Pizzas { get; set; }
     }
 }

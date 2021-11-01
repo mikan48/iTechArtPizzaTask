@@ -10,5 +10,7 @@ namespace iTechArtPizzaTask.Core.Models
     {
         public int IngridientId { get; set; }
         public string IngridientName { get; set; }
+        public int PizzaId { get; set; } //FK_pizzaId
+        public Pizza Pizza { get; set; }
     }
 }

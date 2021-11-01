@@ -7,7 +7,7 @@ using iTechArtPizzaTask.Core.Interfaces;
 
 namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
 {
-    public class PizzasRepository : IPizzasRepository
+    public class PizzaRepository : IPizzasRepository
     {
         private static List<Pizza> pizzas = new List<Pizza>
         {

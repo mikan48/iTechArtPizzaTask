@@ -14,7 +14,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class PizzaController : ControllerBase
     {
-        PizzasRepository pizzasRepository = new PizzasRepository();
+        PizzaRepository pizzasRepository = new PizzaRepository();
 
         [HttpGet]
         public List<Pizza> GetAll()
