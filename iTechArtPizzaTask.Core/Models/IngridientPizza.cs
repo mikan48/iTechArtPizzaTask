@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Models
 {
-    public class Ingridient
+    public class IngridientPizza
     {
-        [Key]
         public int IngridientId { get; set; }
-        public string IngridientName { get; set; }
-        public ICollection<IngridientPizza> Pizzas { get; set; }
+        public Ingridient Ingridient { get; set; }
+        public int PizzaId { get; set; }
+        public Pizza Pizza { get; set; }
     }
 }

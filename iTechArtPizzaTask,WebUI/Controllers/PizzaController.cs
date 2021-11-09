@@ -1,4 +1,5 @@
 ﻿using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Infrastructure.Context;
 using iTechArtPizzaTask.Infrastructure.Repositories.Fakes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,12 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     public class PizzaController : ControllerBase
     {
         PizzaRepository pizzasRepository = new PizzaRepository();
+        private readonly PizzaDeliveryContext pizzaContext = new PizzaDeliveryContext();
 
         [HttpGet]
-        public List<Pizza> GetAll()
+        public List<User> GetAll()
         {
-            return pizzasRepository.GetPizzas();
+            return pizzaContext.Users.ToList();
         }
     }
 }

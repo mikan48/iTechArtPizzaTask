@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,9 +15,12 @@ namespace iTechArtPizzaTask.Core.Models
             this.PizzaName = PizzaName;
         }
 
+        [Key]
         public int PizzaId { get; set; }
         public string PizzaName { get; set; }
-        public List<Ingridient> Ingridients { get; set; }
-        public List<Order> Orders { get; set; }
+        [Column(TypeName = "money")]
+        public int PizzaCost { get; set; }
+        public ICollection<IngridientPizza> Ingridients { get; set; }
+        public ICollection<OrderPizza> Orders { get; set; }
     }
 }
