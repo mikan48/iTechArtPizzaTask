@@ -15,8 +15,6 @@ namespace iTechArtPizzaTask.Infrastructure.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<Ingridient> Ingridients { get; set; }
         public DbSet<PromoCode> PromoCodes { get; set; }
-        public DbSet<IngridientPizza> IngridientPizzas { get; set; }
-        public DbSet<OrderPizza> OrderPizzas { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=pizzadeliverydb;Trusted_Connection=True;");
@@ -24,9 +22,23 @@ namespace iTechArtPizzaTask.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<IngridientPizza>().HasKey(t => new { t.IngridientId, t.PizzaId });
+            modelBuilder.Entity<Pizza>()
+                .HasMany(left => left.Ingridients)
+                .WithMany(right => right.Pizzas)
+                .UsingEntity<IngridientPizza>(
+                    right => right.HasOne(e => e.Ingridient).WithMany().HasForeignKey(e => e.IngridientId),
+                    left => left.HasOne(e => e.Pizza).WithMany().HasForeignKey(e => e.PizzaId),
+                    join => join.ToTable("IngridientPizzas")
+            );
 
-            modelBuilder.Entity<OrderPizza>().HasKey(t => new { t.OrderId, t.PizzaId });
+            modelBuilder.Entity<Order>()
+                .HasMany(left => left.Pizzas)
+                .WithMany(right => right.Orders)
+                .UsingEntity<OrderPizza>(
+                    right => right.HasOne(e => e.Pizza).WithMany().HasForeignKey(e => e.PizzaId),
+                    left => left.HasOne(e => e.Order).WithMany().HasForeignKey(e => e.OrderId),
+                    join => join.ToTable("OrderPizzas")
+            );
 
             modelBuilder.Entity<User>().HasData(
                 new User
@@ -72,14 +84,13 @@ namespace iTechArtPizzaTask.Infrastructure.Context
                 }
             );
             modelBuilder.Entity<IngridientPizza>().HasData(
-                new { PizzaId = 1, IngridientId = 1 },
-                new { PizzaId = 1, IngridientId = 2 },
-                new { PizzaId = 1, IngridientId = 3 },
-                new { PizzaId = 2, IngridientId = 1 },
-                new { PizzaId = 2, IngridientId = 3 },
-                new { PizzaId = 2, IngridientId = 4 }
+                new IngridientPizza { PizzaId = 1, IngridientId = 1 },
+                new IngridientPizza { PizzaId = 1, IngridientId = 2 },
+                new IngridientPizza { PizzaId = 1, IngridientId = 3 },
+                new IngridientPizza { PizzaId = 2, IngridientId = 1 },
+                new IngridientPizza { PizzaId = 2, IngridientId = 3 },
+                new IngridientPizza { PizzaId = 2, IngridientId = 4 }
                 );
-
         }
 
     }

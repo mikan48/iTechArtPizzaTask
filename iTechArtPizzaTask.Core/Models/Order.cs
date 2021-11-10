@@ -17,6 +17,7 @@ namespace iTechArtPizzaTask.Core.Models
         public int OrderCost { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public ICollection<OrderPizza> Pizzas { get; set; }
+        public ICollection<Pizza> Pizzas { get; set; }
+        public ICollection<OrderPizza> OrderPizzas { get; set; }
     }
 }

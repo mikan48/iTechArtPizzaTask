@@ -10,8 +10,8 @@ using iTechArtPizzaTask.Infrastructure.Context;
 namespace iTechArtPizzaTask.Infrastructure.Migrations
 {
     [DbContext(typeof(PizzaDeliveryContext))]
-    [Migration("20211109202547_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20211110191012_seedfix")]
+    partial class seedfix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,9 +71,19 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                     b.Property<int>("PizzaId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("IngridientId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PizzaId1")
+                        .HasColumnType("int");
+
                     b.HasKey("IngridientId", "PizzaId");
 
+                    b.HasIndex("IngridientId1");
+
                     b.HasIndex("PizzaId");
+
+                    b.HasIndex("PizzaId1");
 
                     b.ToTable("IngridientPizzas");
 
@@ -146,9 +156,19 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                     b.Property<int>("PizzaId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OrderId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PizzaId1")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderId", "PizzaId");
 
+                    b.HasIndex("OrderId1");
+
                     b.HasIndex("PizzaId");
+
+                    b.HasIndex("PizzaId1");
 
                     b.ToTable("OrderPizzas");
                 });
@@ -230,16 +250,24 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
             modelBuilder.Entity("iTechArtPizzaTask.Core.Models.IngridientPizza", b =>
                 {
                     b.HasOne("iTechArtPizzaTask.Core.Models.Ingridient", "Ingridient")
-                        .WithMany("Pizzas")
+                        .WithMany()
                         .HasForeignKey("IngridientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("iTechArtPizzaTask.Core.Models.Ingridient", null)
+                        .WithMany("IngridientPizzas")
+                        .HasForeignKey("IngridientId1");
+
                     b.HasOne("iTechArtPizzaTask.Core.Models.Pizza", "Pizza")
-                        .WithMany("Ingridients")
+                        .WithMany()
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("iTechArtPizzaTask.Core.Models.Pizza", null)
+                        .WithMany("IngridientPizzas")
+                        .HasForeignKey("PizzaId1");
 
                     b.Navigation("Ingridient");
 
@@ -264,16 +292,24 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
             modelBuilder.Entity("iTechArtPizzaTask.Core.Models.OrderPizza", b =>
                 {
                     b.HasOne("iTechArtPizzaTask.Core.Models.Order", "Order")
-                        .WithMany("Pizzas")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("iTechArtPizzaTask.Core.Models.Order", null)
+                        .WithMany("OrderPizzas")
+                        .HasForeignKey("OrderId1");
+
                     b.HasOne("iTechArtPizzaTask.Core.Models.Pizza", "Pizza")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("iTechArtPizzaTask.Core.Models.Pizza", null)
+                        .WithMany("OrderPizzas")
+                        .HasForeignKey("PizzaId1");
 
                     b.Navigation("Order");
 
@@ -282,19 +318,19 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
 
             modelBuilder.Entity("iTechArtPizzaTask.Core.Models.Ingridient", b =>
                 {
-                    b.Navigation("Pizzas");
+                    b.Navigation("IngridientPizzas");
                 });
 
             modelBuilder.Entity("iTechArtPizzaTask.Core.Models.Order", b =>
                 {
-                    b.Navigation("Pizzas");
+                    b.Navigation("OrderPizzas");
                 });
 
             modelBuilder.Entity("iTechArtPizzaTask.Core.Models.Pizza", b =>
                 {
-                    b.Navigation("Ingridients");
+                    b.Navigation("IngridientPizzas");
 
-                    b.Navigation("Orders");
+                    b.Navigation("OrderPizzas");
                 });
 
             modelBuilder.Entity("iTechArtPizzaTask.Core.Models.PromoCode", b =>

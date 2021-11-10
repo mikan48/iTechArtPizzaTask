@@ -12,6 +12,7 @@ namespace iTechArtPizzaTask.Core.Models
         [Key]
         public int IngridientId { get; set; }
         public string IngridientName { get; set; }
-        public ICollection<IngridientPizza> Pizzas { get; set; }
+        public ICollection<Pizza> Pizzas { get; set; }
+        public ICollection<IngridientPizza> IngridientPizzas { get; set; }
     }
 }

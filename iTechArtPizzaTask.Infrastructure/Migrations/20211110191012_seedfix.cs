@@ -2,7 +2,7 @@
 
 namespace iTechArtPizzaTask.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class seedfix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,9 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                 columns: table => new
                 {
                     IngridientId = table.Column<int>(type: "int", nullable: false),
-                    PizzaId = table.Column<int>(type: "int", nullable: false)
+                    PizzaId = table.Column<int>(type: "int", nullable: false),
+                    IngridientId1 = table.Column<int>(type: "int", nullable: true),
+                    PizzaId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,11 +78,23 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                         principalColumn: "IngridientId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_IngridientPizzas_Ingridients_IngridientId1",
+                        column: x => x.IngridientId1,
+                        principalTable: "Ingridients",
+                        principalColumn: "IngridientId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_IngridientPizzas_Pizzas_PizzaId",
                         column: x => x.PizzaId,
                         principalTable: "Pizzas",
                         principalColumn: "PizzaId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IngridientPizzas_Pizzas_PizzaId1",
+                        column: x => x.PizzaId1,
+                        principalTable: "Pizzas",
+                        principalColumn: "PizzaId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,7 +130,9 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                 columns: table => new
                 {
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    PizzaId = table.Column<int>(type: "int", nullable: false)
+                    PizzaId = table.Column<int>(type: "int", nullable: false),
+                    OrderId1 = table.Column<int>(type: "int", nullable: true),
+                    PizzaId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -128,11 +144,23 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_OrderPizzas_Orders_OrderId1",
+                        column: x => x.OrderId1,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_OrderPizzas_Pizzas_PizzaId",
                         column: x => x.PizzaId,
                         principalTable: "Pizzas",
                         principalColumn: "PizzaId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderPizzas_Pizzas_PizzaId1",
+                        column: x => x.PizzaId1,
+                        principalTable: "Pizzas",
+                        principalColumn: "PizzaId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -167,16 +195,21 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "IngridientPizzas",
-                columns: new[] { "IngridientId", "PizzaId" },
+                columns: new[] { "IngridientId", "PizzaId", "IngridientId1", "PizzaId1" },
                 values: new object[,]
                 {
-                    { 1, 1 },
-                    { 2, 1 },
-                    { 3, 1 },
-                    { 1, 2 },
-                    { 3, 2 },
-                    { 4, 2 }
+                    { 1, 1, null, null },
+                    { 2, 1, null, null },
+                    { 3, 1, null, null },
+                    { 1, 2, null, null },
+                    { 3, 2, null, null },
+                    { 4, 2, null, null }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IngridientPizzas_IngridientId1",
+                table: "IngridientPizzas",
+                column: "IngridientId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IngridientPizzas_PizzaId",
@@ -184,9 +217,24 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                 column: "PizzaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IngridientPizzas_PizzaId1",
+                table: "IngridientPizzas",
+                column: "PizzaId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderPizzas_OrderId1",
+                table: "OrderPizzas",
+                column: "OrderId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderPizzas_PizzaId",
                 table: "OrderPizzas",
                 column: "PizzaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderPizzas_PizzaId1",
+                table: "OrderPizzas",
+                column: "PizzaId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_PromoCodeId",
