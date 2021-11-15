@@ -1,5 +1,7 @@
 using iTechArtPizzaTask.Core.Interfaces;
+using iTechArtPizzaTask.Core.Services;
 using iTechArtPizzaTask.Infrastructure.Context;
+using iTechArtPizzaTask.Infrastructure.Repositories;
 using iTechArtPizzaTask.Infrastructure.Repositories.Fakes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,9 +31,11 @@ namespace iTechArtPizzaTask.WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             //Core
+            services.AddScoped<IPizzasService, PizzasService>();
 
             //Infrastructure
-            services.AddScoped<IPizzasRepository, PizzaRepository>();
+            //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
+            services.AddScoped<IPizzasRepository, PizzasRepository>();
             services.AddDbContext<PizzaDeliveryContext>();
 
             //WebUI

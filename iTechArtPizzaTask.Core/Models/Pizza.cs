@@ -19,7 +19,7 @@ namespace iTechArtPizzaTask.Core.Models
         public int PizzaId { get; set; }
         public string PizzaName { get; set; }
         [Column(TypeName = "money")]
-        public int PizzaCost { get; set; }
+        public double PizzaCost { get; set; }
         public ICollection<Ingridient> Ingridients { get; set; }
         public ICollection<IngridientPizza> IngridientPizzas { get; set; }
         public ICollection<OrderPizza> OrderPizzas { get; set; }

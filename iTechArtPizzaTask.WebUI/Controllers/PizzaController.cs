@@ -1,6 +1,6 @@
-﻿using iTechArtPizzaTask.Core.Models;
+﻿using iTechArtPizzaTask.Core.Interfaces;
+using iTechArtPizzaTask.Core.Models;
 using iTechArtPizzaTask.Infrastructure.Context;
-using iTechArtPizzaTask.Infrastructure.Repositories.Fakes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,13 +15,17 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class PizzaController : ControllerBase
     {
-        PizzaRepository pizzasRepository = new PizzaRepository();
-        private readonly PizzaDeliveryContext pizzaContext = new PizzaDeliveryContext();
+        private readonly IPizzasService pizzasService;
 
-        [HttpGet]
-        public List<User> GetAll()
+        public PizzaController(IPizzasService pizzasService)
         {
-            return pizzaContext.Users.ToList();
+            this.pizzasService = pizzasService;
+        }
+
+        [HttpGet("async")]
+        public async Task<List<Pizza>> GetAllAsync()
+        {
+            return await pizzasService.GetAllAsync();
         }
     }
 }

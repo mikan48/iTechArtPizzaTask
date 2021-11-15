@@ -7,8 +7,10 @@ using iTechArtPizzaTask.Core.Interfaces;
 
 namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
 {
-    public class PizzaRepository : IPizzasRepository
+    public class FakePizzasRepository //: IPizzasRepository
     {
+        private readonly IPizzasRepository pizzasRepository;
+
         private static List<Pizza> pizzas = new List<Pizza>
         {
             new Pizza
@@ -38,6 +40,9 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
             )
         };
 
-        public List<Pizza> GetPizzas() => pizzas;
+        public async Task<List<Pizza>> GetAllAsync()
+        {
+            return await pizzasRepository.GetAllAsync();
+        }
     }
 }

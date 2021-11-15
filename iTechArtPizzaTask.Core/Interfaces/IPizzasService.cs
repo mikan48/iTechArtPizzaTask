@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Interfaces
 {
-    public interface IPizzasRepository
+    public interface IPizzasService
     {
-        public Task<List<Pizza>> GetAllAsync();
+        Task<List<Pizza>> GetAllAsync();
     }
 }
