@@ -9,5 +9,6 @@ namespace iTechArtPizzaTask.Core.Interfaces
     public interface IPizzasRepository
     {
         public Task<List<Pizza>> GetAllAsync();
+        public Task AddPizzaAsync(string pizzaName, double pizzaCost);
     }
 }

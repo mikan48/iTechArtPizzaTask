@@ -21,5 +21,15 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         {
             return await context.Pizzas.ToListAsync();
         }
+        public async Task AddPizzaAsync(string pizzaName, double pizzaCost)
+        {
+            context.Pizzas.Add(new Pizza
+            {
+                PizzaName = pizzaName,
+                PizzaCost = pizzaCost
+            }
+                );
+            await context.SaveChangesAsync();
+        }
     }
 }

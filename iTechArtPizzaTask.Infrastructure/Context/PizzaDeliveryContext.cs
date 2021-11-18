@@ -44,17 +44,25 @@ namespace iTechArtPizzaTask.Infrastructure.Context
                 new User
                 {
                     UserId = 1,
-                    UserName = "Anton"
+                    Name = "Anton"
                 },
                 new User
                 {
                     UserId = 2,
-                    UserName = "Kate"
+                    Name = "Kate"
                 }
             );
             modelBuilder.Entity<Pizza>().HasData(
-                    new Pizza(1, "Carbonara"),
-                    new Pizza(2, "Pepperoni")
+                    new Pizza
+                    {
+                        PizzaId = 1,
+                        PizzaName = "Carbonara"
+                    },
+                    new Pizza
+                    {
+                        PizzaId = 2,
+                        PizzaName = "Pepperoni"
+                    }
             );
             modelBuilder.Entity<Ingridient>().HasData(
                 new Ingridient

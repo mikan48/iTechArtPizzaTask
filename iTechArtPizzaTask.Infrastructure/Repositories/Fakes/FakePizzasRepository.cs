@@ -11,34 +11,34 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
     {
         private readonly IPizzasRepository pizzasRepository;
 
-        private static List<Pizza> pizzas = new List<Pizza>
-        {
-            new Pizza
-            (
-                PizzaId: 1,
-                PizzaName: "Carbonara"
-            ),
-            new Pizza
-            (
-                PizzaId: 2,
-                PizzaName: "Pepperoni"
-            ),
-            new Pizza
-            (
-                PizzaId: 3,
-                PizzaName: "Hawaiian"
-            ),
-            new Pizza
-            (
-                PizzaId: 4,
-                PizzaName: "Four Cheeses"
-            ),
-            new Pizza
-            (
-                PizzaId: 5,
-                PizzaName: "Four Seasons"
-            )
-        };
+        //private static List<Pizza> pizzas = new List<Pizza>
+        //{
+        //    new Pizza
+        //    (
+        //        PizzaId: 1,
+        //        PizzaName: "Carbonara"
+        //    ),
+        //    new Pizza
+        //    (
+        //        PizzaId: 2,
+        //        PizzaName: "Pepperoni"
+        //    ),
+        //    new Pizza
+        //    (
+        //        PizzaId: 3,
+        //        PizzaName: "Hawaiian"
+        //    ),
+        //    new Pizza
+        //    (
+        //        PizzaId: 4,
+        //        PizzaName: "Four Cheeses"
+        //    ),
+        //    new Pizza
+        //    (
+        //        PizzaId: 5,
+        //        PizzaName: "Four Seasons"
+        //    )
+        //};
 
         public async Task<List<Pizza>> GetAllAsync()
         {

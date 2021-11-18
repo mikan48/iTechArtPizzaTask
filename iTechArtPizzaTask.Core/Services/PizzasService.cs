@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,10 @@ namespace iTechArtPizzaTask.Core.Services
         public async Task<List<Pizza>> GetAllAsync()
         {
             return await pizzasRepository.GetAllAsync();
+        }
+        public async Task AddPizzaAsync(string pizzaName, double pizzaCost)
+        {
+            await pizzasRepository.AddPizzaAsync(pizzaName, pizzaCost);
         }
     }
 }

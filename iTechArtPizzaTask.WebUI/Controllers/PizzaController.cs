@@ -27,5 +27,12 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         {
             return await pizzasService.GetAllAsync();
         }
+
+        [HttpPost("async")]
+        public async Task<ActionResult<Pizza>> AddPizzaAsync(string pizzaName, double pizzaCost)
+        {
+            await pizzasService.AddPizzaAsync(pizzaName, pizzaCost);
+            return Ok();
+        }
     }
 }

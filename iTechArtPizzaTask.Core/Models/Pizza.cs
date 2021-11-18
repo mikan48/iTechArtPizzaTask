@@ -9,11 +9,11 @@ namespace iTechArtPizzaTask.Core.Models
 {
     public class Pizza
     {
-        public Pizza(int PizzaId, string PizzaName)
-        {
-            this.PizzaId = PizzaId;
-            this.PizzaName = PizzaName;
-        }
+        //public Pizza(int PizzaId, string PizzaName)
+        //{
+        //    this.PizzaId = PizzaId;
+        //    this.PizzaName = PizzaName;
+        //}
 
         [Key]
         public int PizzaId { get; set; }

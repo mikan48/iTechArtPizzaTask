@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "iTechArtPizzaTask.Core": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Himawari\\source\\repos\\iTechArtPizzaTask.webAPI"
+    }
+  }
+}
