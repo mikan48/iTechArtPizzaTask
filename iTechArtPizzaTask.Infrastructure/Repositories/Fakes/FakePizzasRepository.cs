@@ -40,9 +40,9 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
         //    )
         //};
 
-        public async Task<List<Pizza>> GetAllAsync()
+        public async Task<List<Pizza>> GetAllPizzasAsync()
         {
-            return await pizzasRepository.GetAllAsync();
+            return await pizzasRepository.GetAllPizzasAsync();
         }
     }
 }

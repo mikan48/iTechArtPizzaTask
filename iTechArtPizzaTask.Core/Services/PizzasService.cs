@@ -16,13 +16,18 @@ namespace iTechArtPizzaTask.Core.Services
         {
             this.pizzasRepository = pizzasRepository ?? throw new ArgumentNullException(nameof(pizzasRepository));
         }
-        public async Task<List<Pizza>> GetAllAsync()
+        public async Task<List<Pizza>> GetAllPizzasAsync()
         {
-            return await pizzasRepository.GetAllAsync();
+            return await pizzasRepository.GetAllPizzasAsync();
         }
         public async Task AddPizzaAsync(string pizzaName, double pizzaCost)
         {
             await pizzasRepository.AddPizzaAsync(pizzaName, pizzaCost);
+        }
+
+        public async Task DeletePizzaAsync(string pizzaName)
+        {
+            await pizzasRepository.DeletePizzaAsync(pizzaName);
         }
     }
 }

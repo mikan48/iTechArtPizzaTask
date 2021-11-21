@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Interfaces
 {
-    public interface IPizzasService
+    public interface IUsersService
     {
-        Task<List<Pizza>> GetAllPizzasAsync();
-        Task AddPizzaAsync(string pizzaName, double pizzaCost);
-        Task DeletePizzaAsync(string pizzaName);
+        Task<List<User>> GetAllUsersAsync();
     }
 }

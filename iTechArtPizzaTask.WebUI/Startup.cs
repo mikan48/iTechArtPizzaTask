@@ -32,10 +32,14 @@ namespace iTechArtPizzaTask.WebUI
         {
             //Core
             services.AddScoped<IPizzasService, PizzasService>();
+            services.AddScoped<IIngridientsService, IngridientsService>();
+            services.AddScoped<IOrdersService, OrdersService>();
 
             //Infrastructure
             //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
             services.AddScoped<IPizzasRepository, PizzasRepository>();
+            services.AddScoped<IIngridientsRepository, IngridientsRepository>();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddDbContext<PizzaDeliveryContext>();
 
             //WebUI

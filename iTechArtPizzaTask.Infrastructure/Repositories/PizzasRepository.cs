@@ -17,18 +17,28 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         {
             this.context = context;
         }
-        public async Task<List<Pizza>> GetAllAsync()
+
+        public async Task<List<Pizza>> GetAllPizzasAsync()
         {
             return await context.Pizzas.ToListAsync();
         }
+
+        //wip
         public async Task AddPizzaAsync(string pizzaName, double pizzaCost)
         {
-            context.Pizzas.Add(new Pizza
+            await context.Pizzas.AddAsync(new Pizza
             {
                 PizzaName = pizzaName,
                 PizzaCost = pizzaCost
+                //Ingridients = ingridients
             }
                 );
+            await context.SaveChangesAsync();
+        }
+        
+        public async Task DeletePizzaAsync(string pizzaName)
+        {
+            context.Pizzas.Remove(context.Pizzas.Where(b => b.PizzaName == pizzaName).FirstOrDefault());
             await context.SaveChangesAsync();
         }
     }
