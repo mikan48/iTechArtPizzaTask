@@ -9,8 +9,8 @@ namespace iTechArtPizzaTask.Core.Interfaces
 {
     public interface IPizzasService
     {
-        Task<List<Pizza>> GetAllPizzasAsync();
-        Task AddPizzaAsync(string pizzaName, double pizzaCost);
-        Task DeletePizzaAsync(string pizzaName);
+        Task<List<Pizza>> GetAllAsync();
+        Task AddAsync(Pizza pizza);
+        Task DeleteAsync(Pizza pizza);
     }
 }

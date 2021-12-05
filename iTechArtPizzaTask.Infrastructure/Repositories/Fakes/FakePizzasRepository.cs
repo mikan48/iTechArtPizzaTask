@@ -9,7 +9,7 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
 {
     public class FakePizzasRepository //: IPizzasRepository
     {
-        private readonly IPizzasRepository pizzasRepository;
+        //private readonly IPizzasRepository pizzasRepository;
 
         //private static List<Pizza> pizzas = new List<Pizza>
         //{
@@ -40,9 +40,9 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories.Fakes
         //    )
         //};
 
-        public async Task<List<Pizza>> GetAllPizzasAsync()
-        {
-            return await pizzasRepository.GetAllPizzasAsync();
-        }
+        //public async Task<List<Pizza>> GetAllPizzasAsync()
+        //{
+        //    return await pizzasRepository.GetAllPizzasAsync();
+        //}
     }
 }

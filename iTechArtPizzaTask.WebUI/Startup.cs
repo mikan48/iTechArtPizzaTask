@@ -1,4 +1,5 @@
 using iTechArtPizzaTask.Core.Interfaces;
+using iTechArtPizzaTask.Core.Models;
 using iTechArtPizzaTask.Core.Services;
 using iTechArtPizzaTask.Infrastructure.Context;
 using iTechArtPizzaTask.Infrastructure.Repositories;
@@ -34,12 +35,16 @@ namespace iTechArtPizzaTask.WebUI
             services.AddScoped<IPizzasService, PizzasService>();
             services.AddScoped<IIngridientsService, IngridientsService>();
             services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<ICartService, CartsService>();
+            services.AddScoped<IUserService, UsersService>();
 
             //Infrastructure
             //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
-            services.AddScoped<IPizzasRepository, PizzasRepository>();
-            services.AddScoped<IIngridientsRepository, IngridientsRepository>();
-            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IRepository<Pizza>, PizzasRepository>();
+            services.AddScoped<IRepository<Ingridient>, IngridientsRepository>();
+            services.AddScoped<IRepository<Order>, OrdersRepository>();
+            services.AddScoped<IRepository<OrderedPizza>, CartsRepository>();
+            services.AddScoped<IRepository<User>, UsersRepository>();
             services.AddDbContext<PizzaDeliveryContext>();
 
             //WebUI

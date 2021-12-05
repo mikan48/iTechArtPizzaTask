@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Interfaces
 {
-    public interface IIngridientsRepository
+    public interface IRepository<T>
     {
-        public Task AddIngridientAsync(string ingridientName);
+        Task<List<T>> GetAllAsync();
+        Task AddAsync(T item);
+        Task UpdateAsync(T item);
+        Task DeleteAsync(T item);
     }
 }

@@ -23,22 +23,22 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpGet("async")]
-        public async Task<List<Pizza>> GetAllPizzasAsync()
+        public async Task<List<Pizza>> GetAllAsync()
         {
-            return await pizzasService.GetAllPizzasAsync();
+            return await pizzasService.GetAllAsync();
         }
 
         [HttpPost("async")]
-        public async Task<ActionResult<Pizza>> AddPizzaAsync(string pizzaName, double pizzaCost)
+        public async Task<ActionResult<Pizza>> AddAsync(Pizza pizza)
         {
-            await pizzasService.AddPizzaAsync(pizzaName, pizzaCost);
+            await pizzasService.AddAsync(pizza);
             return Ok();
         }
 
         [HttpDelete("async")]
-        public async Task<ActionResult<Pizza>> DeletePizzaAsync(string pizzaName)
+        public async Task<ActionResult<Pizza>> DeleteAsync(Pizza pizza)
         {
-            await pizzasService.DeletePizzaAsync(pizzaName);
+            await pizzasService.DeleteAsync(pizza);
             return Ok();
         }
     }

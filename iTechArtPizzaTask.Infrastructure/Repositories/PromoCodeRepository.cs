@@ -10,34 +10,34 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Infrastructure.Repositories
 {
-    public class IngridientsRepository : IRepository<Ingridient>
+    public class PromoCodeRepository : IRepository<PromoCode>
     {
         private readonly PizzaDeliveryContext context;
-        public IngridientsRepository(PizzaDeliveryContext context)
+        public PromoCodeRepository(PizzaDeliveryContext context)
         {
             this.context = context;
         }
 
-        public async Task AddAsync(Ingridient ingridient)
+        public async Task AddAsync(PromoCode promoCode)
         {
-            if(context.Ingridients.Where(b => b.IngridientName == ingridient.IngridientName).Count() == 0)
+            if (context.PromoCodes.Where(b => b.Code == promoCode.Code).Count() == 0)
             {
-                await context.Ingridients.AddAsync(new Ingridient { IngridientName = ingridient.IngridientName });
+                await context.PromoCodes.AddAsync(promoCode);
                 await context.SaveChangesAsync();
             }
         }
 
-        public Task DeleteAsync(Ingridient item)
+        public Task DeleteAsync(PromoCode item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Ingridient>> GetAllAsync()
+        public async Task<List<PromoCode>> GetAllAsync()
         {
-            return await context.Ingridients.ToListAsync();
+            return await context.PromoCodes.ToListAsync();
         }
 
-        public Task UpdateAsync(Ingridient item)
+        public Task UpdateAsync(PromoCode item)
         {
             throw new NotImplementedException();
         }

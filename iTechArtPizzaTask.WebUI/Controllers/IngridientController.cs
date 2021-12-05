@@ -18,10 +18,16 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             this.ingridientsService = ingridientsService;
         }
 
-        [HttpPost("async")]
-        public async Task<ActionResult<Ingridient>> AddIngridientAsync(string ingridientName)
+        [HttpGet("async")]
+        public async Task<List<Ingridient>> GetAllAsync()
         {
-            await ingridientsService.AddIngridientAsync(ingridientName);
+            return await ingridientsService.GetAllAsync();
+        }
+
+        [HttpPost("async")]
+        public async Task<ActionResult<Ingridient>> AddAsync(Ingridient ingridient)
+        {
+            await ingridientsService.AddAsync(ingridient);
             return Ok();
         }
     }

@@ -9,10 +9,7 @@ namespace iTechArtPizzaTask.Core.Interfaces
 {
     public interface IOrdersService
     {
-        Task<List<Order>> GetAllOrdersAsync();
-        Task AddOrderAsync();
-        //Task AddPizzasInCart();
-        //Task EditPizzasInCart();
-        Task AddPromoCodeToOrder();
+        Task<List<Order>> GetAllAsync();
+        Task AddAsync(Order order);
     }
 }

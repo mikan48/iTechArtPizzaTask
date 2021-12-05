@@ -21,9 +21,16 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpGet("async")]
-        public async Task<List<Order>> GetAllOrdersAsync()
+        public async Task<List<Order>> GetAllAsync()
         {
-            return await ordersService.GetAllOrdersAsync();
+            return await ordersService.GetAllAsync();
+        }
+
+        [HttpPost("async")]
+        public async Task<ActionResult<Order>> AddAsync(Order order)
+        {
+            await ordersService.AddAsync(order);
+            return Ok();
         }
     }
 }

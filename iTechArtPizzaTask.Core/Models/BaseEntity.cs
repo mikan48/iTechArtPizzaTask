@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Models
 {
-    public class User : BaseEntity
+    public abstract class BaseEntity
     {
-        public string Name { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        [Key]
+        public Guid Id { get; set; }
     }
 }

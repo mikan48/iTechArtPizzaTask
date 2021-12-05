@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Models
 {
-    public class Ingridient
+    public class Ingridient : BaseEntity
     {
-        [Key]
-        public int IngridientId { get; set; }
         public string IngridientName { get; set; }
-        public ICollection<Pizza> Pizzas { get; set; }
-        public ICollection<IngridientPizza> IngridientPizzas { get; set; }
     }
 }

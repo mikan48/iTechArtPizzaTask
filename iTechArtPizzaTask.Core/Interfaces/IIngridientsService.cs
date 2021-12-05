@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iTechArtPizzaTask.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace iTechArtPizzaTask.Core.Interfaces
 {
     public interface IIngridientsService
     {
-        Task AddIngridientAsync(string ingridientName);
+        Task<List<Ingridient>> GetAllAsync();
+        Task AddAsync(Ingridient ingridient);
     }
 }

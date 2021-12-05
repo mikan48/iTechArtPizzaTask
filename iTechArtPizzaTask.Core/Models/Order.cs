@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Models
 {
-    public class Order
+    public class Order : BaseEntity
     {
-        [Key]
-        public int OrderId { get; set; }
         [Column(TypeName = "tinyint")]
         public OrderStatuses Status { get; set; }
         [Column(TypeName = "tinyint")]
@@ -24,7 +22,6 @@ namespace iTechArtPizzaTask.Core.Models
         public string OrderCommentary { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public ICollection<Pizza> Pizzas { get; set; }
-        public ICollection<OrderPizza> OrderPizzas { get; set; }
+        public ICollection<OrderedPizza> OrderedPizzas { get; set; }
     }
 }

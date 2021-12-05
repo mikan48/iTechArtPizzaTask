@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Models
 {
-    public class OrderPizza
+    public class PizzasIngridient : BaseEntity
     {
-        public int OrderId { get; set; }
-        public Order Order { get; set; }
-        public int PizzaId { get; set; }
+        public Guid IngridientId { get; set; }
+        public Ingridient Ingridient { get; set; }
+        public Guid PizzaId { get; set; }
         public Pizza Pizza { get; set; }
     }
 }

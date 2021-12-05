@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Interfaces
 {
-    public interface IUsersService
+    public interface IUserService
     {
-        Task<List<User>> GetAllUsersAsync();
+        Task<List<User>> GetAllAsync();
+        Task AddAsync(User user);
+        Task DeleteAsync(User user);
     }
 }

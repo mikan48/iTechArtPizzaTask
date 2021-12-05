@@ -1,4 +1,5 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
+using iTechArtPizzaTask.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,20 @@ namespace iTechArtPizzaTask.Core.Services
 {
     public class IngridientsService : IIngridientsService
     {
-        private readonly IIngridientsRepository ingridientsRepository;
-        public IngridientsService(IIngridientsRepository ingridientsRepository)
+        private readonly IRepository<Ingridient> repository;
+        public IngridientsService(IRepository<Ingridient> repository)
         {
-            this.ingridientsRepository = ingridientsRepository ?? throw new ArgumentNullException(nameof(ingridientsRepository));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task AddIngridientAsync(string ingridientName)
+        public async Task<List<Ingridient>> GetAllAsync()
         {
-            await ingridientsRepository.AddIngridientAsync(ingridientName);
+            return await repository.GetAllAsync();
+        }
+
+        public async Task AddAsync(Ingridient ingridient)
+        {
+            await repository.AddAsync(ingridient);
         }
     }
 }

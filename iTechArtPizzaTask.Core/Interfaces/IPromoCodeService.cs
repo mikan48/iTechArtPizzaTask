@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Interfaces
 {
-    public interface IOrdersRepository
+    public interface IPromoCodeService
     {
-        public Task<List<Order>> GetAllOrdersAsync();
+        Task<List<PromoCode>> GetAllAsync();
+        Task AddAsync(PromoCode promoCode);
     }
 }

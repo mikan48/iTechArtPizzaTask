@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Models
 {
-    public class PromoCode
+    public class PromoCode : BaseEntity
     {
-        [Key]
-        public int PromoCodeId { get; set;}
+        public string Code { get; set; }
         public double Discount { get; set; }
+
         [Column(TypeName = "smalldatetime")]
         public DateTime StartDate { get; set; }
+
         [Column(TypeName = "smalldatetime")]
         public DateTime EndDate { get; set; }
         public ICollection<Order> Orders { get; set; }

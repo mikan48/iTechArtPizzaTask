@@ -11,23 +11,23 @@ namespace iTechArtPizzaTask.Core.Services
 {
     public class PizzasService : IPizzasService
     {
-        private readonly IPizzasRepository pizzasRepository;
-        public PizzasService(IPizzasRepository pizzasRepository)
+        private readonly IRepository<Pizza> repository;
+        public PizzasService(IRepository<Pizza> repository)
         {
-            this.pizzasRepository = pizzasRepository ?? throw new ArgumentNullException(nameof(pizzasRepository));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
-        public async Task<List<Pizza>> GetAllPizzasAsync()
+        public async Task<List<Pizza>> GetAllAsync()
         {
-            return await pizzasRepository.GetAllPizzasAsync();
+            return await repository.GetAllAsync();
         }
-        public async Task AddPizzaAsync(string pizzaName, double pizzaCost)
+        public async Task AddAsync(Pizza pizza)
         {
-            await pizzasRepository.AddPizzaAsync(pizzaName, pizzaCost);
+            await repository.AddAsync(pizza);
         }
 
-        public async Task DeletePizzaAsync(string pizzaName)
+        public async Task DeleteAsync(Pizza pizza)
         {
-            await pizzasRepository.DeletePizzaAsync(pizzaName);
+            await repository.DeleteAsync(pizza);
         }
     }
 }

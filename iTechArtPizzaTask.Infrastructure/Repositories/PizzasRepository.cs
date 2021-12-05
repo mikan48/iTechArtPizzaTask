@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Infrastructure.Repositories
 {
-    public class PizzasRepository : IPizzasRepository
+    public class PizzasRepository : IRepository<Pizza>
     {
         private readonly PizzaDeliveryContext context;
         public PizzasRepository(PizzaDeliveryContext context)
@@ -18,28 +18,37 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             this.context = context;
         }
 
-        public async Task<List<Pizza>> GetAllPizzasAsync()
+        public async Task<List<Pizza>> GetAllAsync()
         {
             return await context.Pizzas.ToListAsync();
         }
 
         //wip
-        public async Task AddPizzaAsync(string pizzaName, double pizzaCost)
+        public async Task AddAsync(Pizza pizza)
         {
-            await context.Pizzas.AddAsync(new Pizza
+            //var ingridients = context.Ingridients.FirstOrDefault();
+            if (context.Pizzas.Where(b => b.PizzaName == pizza.PizzaName).Count() == 0)
             {
-                PizzaName = pizzaName,
-                PizzaCost = pizzaCost
-                //Ingridients = ingridients
-            }
+                await context.Pizzas.AddAsync(new Pizza
+                {
+                    PizzaName = pizza.PizzaName,
+                    PizzaCost = pizza.PizzaCost
+                }
                 );
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
+                
         }
         
-        public async Task DeletePizzaAsync(string pizzaName)
+        public async Task DeleteAsync(Pizza pizza)
         {
-            context.Pizzas.Remove(context.Pizzas.Where(b => b.PizzaName == pizzaName).FirstOrDefault());
+            context.Pizzas.Remove(context.Pizzas.Where(b => b.PizzaName == pizza.PizzaName).FirstOrDefault());
             await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Pizza item)
+        {
+            throw new NotImplementedException();
         }
     }
 }
