@@ -12,9 +12,9 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService userService;
+        private readonly IService<User> userService;
 
-        public UserController(IUserService userService)
+        public UserController(IService<User> userService)
         {
             this.userService = userService;
         }

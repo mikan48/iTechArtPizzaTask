@@ -32,16 +32,16 @@ namespace iTechArtPizzaTask.WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             //Core
-            services.AddScoped<IPizzasService, PizzasService>();
-            services.AddScoped<IIngridientsService, IngridientsService>();
-            services.AddScoped<IOrdersService, OrdersService>();
-            services.AddScoped<ICartService, CartsService>();
-            services.AddScoped<IUserService, UsersService>();
+            services.AddScoped<IService<Pizza>, PizzasService>();
+            services.AddScoped<IService<Ingredient>, IngredientsService>();
+            services.AddScoped<IService<Order>, OrdersService>();
+            services.AddScoped<IService<Order>, CartsService>();
+            services.AddScoped<IService<User>, UsersService>();
 
             //Infrastructure
             //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
             services.AddScoped<IRepository<Pizza>, PizzasRepository>();
-            services.AddScoped<IRepository<Ingridient>, IngridientsRepository>();
+            services.AddScoped<IRepository<Ingredient>, IngredientsRepository>();
             services.AddScoped<IRepository<Order>, OrdersRepository>();
             services.AddScoped<IRepository<OrderedPizza>, CartsRepository>();
             services.AddScoped<IRepository<User>, UsersRepository>();

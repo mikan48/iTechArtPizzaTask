@@ -10,22 +10,22 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IngridientController : ControllerBase
+    public class IngredientController : ControllerBase
     {
-        private readonly IIngridientsService ingridientsService;
-        public IngridientController(IIngridientsService ingridientsService)
+        private readonly IService<Ingredient> ingridientsService;
+        public IngredientController(IService<Ingredient> ingridientsService)
         {
             this.ingridientsService = ingridientsService;
         }
 
         [HttpGet("async")]
-        public async Task<List<Ingridient>> GetAllAsync()
+        public async Task<List<Ingredient>> GetAllAsync()
         {
             return await ingridientsService.GetAllAsync();
         }
 
         [HttpPost("async")]
-        public async Task<ActionResult<Ingridient>> AddAsync(Ingridient ingridient)
+        public async Task<ActionResult<Ingredient>> AddAsync(Ingredient ingridient)
         {
             await ingridientsService.AddAsync(ingridient);
             return Ok();

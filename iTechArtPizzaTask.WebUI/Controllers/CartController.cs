@@ -12,30 +12,30 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private readonly ICartService cartService;
+        private readonly IService<Order> cartService;
 
-        public CartController(ICartService cartService)
+        public CartController(IService<Order> cartService)
         {
             this.cartService = cartService;
         }
 
         [HttpGet("async")]
-        public async Task<List<OrderedPizza>> GetAllAsync()
+        public async Task<List<Order>> GetAllAsync()
         {
             return await cartService.GetAllAsync();
         }
 
         [HttpPost("async")]
-        public async Task<ActionResult<OrderedPizza>> AddAsync(OrderedPizza orderedPizza)
+        public async Task<ActionResult<Order>> AddAsync(Order order)
         {
-            await cartService.AddAsync(orderedPizza);
+            await cartService.AddAsync(order);
             return Ok();
         }
 
         [HttpDelete("async")]
-        public async Task<ActionResult<OrderedPizza>> DeleteAsync(OrderedPizza orderedPizza)
+        public async Task<ActionResult<Order>> DeleteAsync(Order order)
         {
-            await cartService.DeleteAsync(orderedPizza);
+            await cartService.DeleteAsync(order);
             return Ok();
         }
 

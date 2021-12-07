@@ -13,9 +13,9 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrdersService ordersService;
+        private readonly IService<Order> ordersService;
 
-        public OrderController(IOrdersService ordersService)
+        public OrderController(IService<Order> ordersService)
         {
             this.ordersService = ordersService;
         }

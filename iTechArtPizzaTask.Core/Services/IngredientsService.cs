@@ -8,28 +8,31 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class PromoCodeService : IService<PromoCode>
+    public class IngredientsService : IService<Ingredient>
     {
-        private readonly IRepository<PromoCode> repository;
-        public PromoCodeService(IRepository<PromoCode> repository)
+        private readonly IRepository<Ingredient> repository;
+        public IngredientsService(IRepository<Ingredient> repository)
         {
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
-        public async Task<List<PromoCode>> GetAllAsync()
+
+        public async Task<List<Ingredient>> GetAllAsync()
         {
             return await repository.GetAllAsync();
         }
-        public async Task AddAsync(PromoCode promoCode)
+
+        public async Task AddAsync(Ingredient ingredient)
         {
-            await repository.AddAsync(promoCode);
+            await repository.AddAsync(ingredient);
         }
 
-        public Task UpdateAsync(PromoCode item)
+        //
+        public Task UpdateAsync(Ingredient item)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(PromoCode item)
+        public Task DeleteAsync(Ingredient item)
         {
             throw new NotImplementedException();
         }

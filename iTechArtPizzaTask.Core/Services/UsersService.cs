@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class UsersService : IUserService
+    public class UsersService : IService<User>
     {
         private readonly IRepository<User> repository;
         public UsersService(IRepository<User> repository)
@@ -29,6 +29,11 @@ namespace iTechArtPizzaTask.Core.Services
         public async Task<List<User>> GetAllAsync()
         {
             return await repository.GetAllAsync();
+        }
+
+        public Task UpdateAsync(User item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class OrdersService : IOrdersService
+    public class OrdersService : IService<Order>
     {
         private readonly IRepository<Order> repository;
         public OrdersService(IRepository<Order> repository)
@@ -20,9 +20,19 @@ namespace iTechArtPizzaTask.Core.Services
             await repository.AddAsync(order);
         }
 
+        public Task DeleteAsync(Order item)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Order>> GetAllAsync()
         {
             return await repository.GetAllAsync();
+        }
+
+        public Task UpdateAsync(Order item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

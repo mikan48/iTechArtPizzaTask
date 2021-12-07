@@ -15,9 +15,9 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class PizzaController : ControllerBase
     {
-        private readonly IPizzasService pizzasService;
+        private readonly IService<Pizza> pizzasService;
 
-        public PizzaController(IPizzasService pizzasService)
+        public PizzaController(IService<Pizza> pizzasService)
         {
             this.pizzasService = pizzasService;
         }

@@ -8,32 +8,32 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class CartsService : ICartService
+    public class CartsService : IService<Order>
     {
-        private readonly IRepository<OrderedPizza> repository;
-        public CartsService(IRepository<OrderedPizza> repository)
+        private readonly IRepository<Order> repository;
+        public CartsService(IRepository<Order> repository)
         {
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task AddAsync(OrderedPizza orderedPizza)
+        public async Task AddAsync(Order order)
         {
-            await repository.AddAsync(orderedPizza);
+            await repository.AddAsync(order);
         }
 
-        public async Task DeleteAsync(OrderedPizza orderedPizza)
+        public async Task DeleteAsync(Order order)
         {
-            await repository.DeleteAsync(orderedPizza);
+            await repository.DeleteAsync(order);
         }
 
-        public async Task<List<OrderedPizza>> GetAllAsync()
+        public async Task<List<Order>> GetAllAsync()
         {
             return await repository.GetAllAsync();
         }
 
-        public async Task UpdateAsync(OrderedPizza orderedPizza)
+        public async Task UpdateAsync(Order order)
         {
-            await repository.UpdateAsync(orderedPizza);
+            await repository.UpdateAsync(order);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class PizzasService : IPizzasService
+    public class PizzasService : IService<Pizza>
     {
         private readonly IRepository<Pizza> repository;
         public PizzasService(IRepository<Pizza> repository)
@@ -28,6 +28,11 @@ namespace iTechArtPizzaTask.Core.Services
         public async Task DeleteAsync(Pizza pizza)
         {
             await repository.DeleteAsync(pizza);
+        }
+
+        public Task UpdateAsync(Pizza item)
+        {
+            throw new NotImplementedException();
         }
     }
 }
