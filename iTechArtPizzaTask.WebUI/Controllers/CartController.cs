@@ -39,11 +39,11 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             return Ok();
         }
 
-        //[HttpPut("async")]
-        //public async Task<ActionResult<Pizza>> UpdateAsync(OrderedPizza orderedPizza)
-        //{
-        //    await cartService.UpdateAsync(orderedPizza);
-        //    return Ok();
-        //}
+        [HttpPut("async")]
+        public async Task<ActionResult<Pizza>> UpdateAsync(Order order)
+        {
+            await cartService.UpdateAsync(order);
+            return Ok();
+        }
     }
 }
