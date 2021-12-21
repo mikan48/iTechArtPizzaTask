@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Core.Services;
 using iTechArtPizzaTask.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,16 +30,24 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpPost("async")]
-        public async Task<ActionResult<Pizza>> AddAsync(Pizza pizza)
+        public async Task<ActionResult<Pizza>> AddAsync(string pizzaName)
         {
-            await pizzasService.AddAsync(pizza);
+            await pizzasService.AddAsync( new Pizza()
+            {
+                PizzaName = pizzaName
+            }
+                );
             return Ok();
         }
 
         [HttpDelete("async")]
-        public async Task<ActionResult<Pizza>> DeleteAsync(Pizza pizza)
+        public async Task<ActionResult<Pizza>> DeleteAsync(string pizzaName)
         {
-            await pizzasService.DeleteAsync(pizza);
+            await pizzasService.DeleteAsync(new Pizza()
+            {
+                PizzaName = pizzaName
+            }
+                );
             return Ok();
         }
     }

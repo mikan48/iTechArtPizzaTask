@@ -23,10 +23,8 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             return await context.Pizzas.ToListAsync();
         }
 
-        //wip
         public async Task AddAsync(Pizza pizza)
         {
-            //var ingridients = context.Ingridients.FirstOrDefault();
             if (context.Pizzas.Where(b => b.PizzaName == pizza.PizzaName).Count() == 0)
             {
                 await context.Pizzas.AddAsync(new Pizza
@@ -36,8 +34,7 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
                 }
                 );
                 await context.SaveChangesAsync();
-            }
-                
+            }               
         }
         
         public async Task DeleteAsync(Pizza pizza)

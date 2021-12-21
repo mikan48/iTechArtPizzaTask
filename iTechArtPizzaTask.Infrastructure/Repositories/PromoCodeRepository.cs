@@ -36,7 +36,6 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         {
             return await context.PromoCodes.ToListAsync();
         }
-
         public Task UpdateAsync(PromoCode item)
         {
             throw new NotImplementedException();

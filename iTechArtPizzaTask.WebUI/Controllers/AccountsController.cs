@@ -2,10 +2,14 @@
 using iTechArtPizzaTask.WebUI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.WebUI.Controllers
@@ -15,16 +19,23 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private IConfiguration _configuration;
 
-        public AccountsController(UserManager<User> userManager)
+        public AccountsController(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            _configuration = configuration;
         }
 
-        [HttpGet("/register")]
+        [HttpPost("/register")]
         public async Task<ActionResult> Register(RegisterModel model)
         {
-            var user = new User
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                return BadRequest("User already exists");
+            }
+            user = new User
             {
                 Email = model.Email,
                 UserName = model.Email,
@@ -40,7 +51,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 
         //wip
 
-        [HttpGet("/login")]
+        [HttpPost("/login")]
         public async Task<ActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
@@ -51,22 +62,31 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             if (!await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 return Unauthorized("Wrong password");
-            }
+            }            
 
-            //wip
+            var roles = await _userManager.GetRolesAsync(user);
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim("id", user.Id.ToString()),
+                new Claim("name", user.Name),
+                new Claim("role", roles.FirstOrDefault() ?? "")
+            };
 
-            //var roles = await _userManager.GetRolesAsync(user);
-            //List<Claim> claims = new List<Claim>
-            //{
-            //    new Claim("id", user.Id.ToString()),
-            //    new Claim("name", user.Name),
-            //    new Claim("role", roles.FirstOrDefault() ?? "")
-            //};
+            var authSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
 
+            var token = new JwtSecurityToken(
+                expires: DateTime.Now.AddHours(1),
+                claims: claims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
 
-
-
-            return Ok();
+            return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo
+                }
+            );
         }
     }
 }
