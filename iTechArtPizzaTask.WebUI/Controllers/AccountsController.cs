@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Models;
 using iTechArtPizzaTask.WebUI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpPost("/register")]
+        [AllowAnonymous]
         public async Task<ActionResult> Register(RegisterModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -49,9 +51,8 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             return Ok();
         }
 
-        //wip
-
         [HttpPost("/login")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);

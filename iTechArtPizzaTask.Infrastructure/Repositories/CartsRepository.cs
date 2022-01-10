@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Infrastructure.Repositories
 {
-    public class CartsRepository : IRepository<OrderedPizza>
+    public class CartsRepository : IRepository<Order>
     {
         private readonly PizzaDeliveryContext context;
         public CartsRepository(PizzaDeliveryContext context)
@@ -18,24 +18,36 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             this.context = context;
         }
 
-        public Task AddAsync(OrderedPizza orderedPizza)
+        public Task AddAsync(Order order)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(OrderedPizza orderedPizza)
+        public Task DeleteAsync(Order order)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<OrderedPizza>> GetAllAsync()
+        public async Task<Order> FindItemByIdAsync(Guid id)
         {
-            return await context.OrderedPizzas.ToListAsync();
+            Order order = await context.Orders.FindAsync(id);
+            return order;
         }
 
-        public Task UpdateAsync(OrderedPizza orderedPizza)
+        public Task<Order> FindItemByNameAsync(string name)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Order>> GetAllAsync()
+        {
+            return await context.Orders.ToListAsync();
+        }
+
+        public async Task UpdateAsync(Order order)
+        {
+            context.Orders.Update(order);
+            await context.SaveChangesAsync();
         }
     }
 }

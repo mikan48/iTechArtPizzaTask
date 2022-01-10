@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,18 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpGet("async")]
-        public async Task<List<Ingredient>> GetAllAsync()
+        [Authorize(Roles = "Admin")]
+        public async Task<List<Ingredient>> GetAllAsync(int page = 1, int pageSize = 2)
         {
-            return await ingridientsService.GetAllAsync();
+            List<Ingredient> ingredients = await ingridientsService.GetAllAsync();
+
+            var items = ingredients.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return items;
         }
 
         [HttpPost("async")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Ingredient>> AddAsync(string ingridientName, double ingridientCost)
         {
             await ingridientsService.AddAsync( new Ingredient()

@@ -42,14 +42,16 @@ namespace iTechArtPizzaTask.WebUI
             services.AddScoped<IService<Order>, OrdersService>();
             services.AddScoped<IService<Order>, CartsService>();
             services.AddScoped<IService<User>, UsersService>();
+            services.AddScoped<IService<PizzasIngredient>, PizzasIngredientsService>();
 
             //Infrastructure
             //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
             services.AddScoped<IRepository<Pizza>, PizzasRepository>();
             services.AddScoped<IRepository<Ingredient>, IngredientsRepository>();
             services.AddScoped<IRepository<Order>, OrdersRepository>();
-            services.AddScoped<IRepository<OrderedPizza>, CartsRepository>();
+            services.AddScoped<IRepository<Order>, CartsRepository>();
             services.AddScoped<IRepository<User>, UsersRepository>();
+            services.AddScoped<IRepository<PizzasIngredient>, PizzasIngredientsRepository>();
             services.AddDbContext<PizzaDeliveryContext>();
 
             //WebUI

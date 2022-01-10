@@ -33,5 +33,15 @@ namespace iTechArtPizzaTask.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<PromoCode> FindItemByNameAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PromoCode> FindItemByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

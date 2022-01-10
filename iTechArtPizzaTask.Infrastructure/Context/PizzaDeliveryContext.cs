@@ -32,7 +32,9 @@ namespace iTechArtPizzaTask.Infrastructure.Context
             modelBuilder.Entity<Pizza>().HasMany(n => n.OrderedPizzas).WithOne(n => n.Pizza);
             modelBuilder.Entity<Pizza>().HasMany(n => n.PizzasIngridients).WithOne(n => n.Pizza);
             modelBuilder.Entity<Ingredient>().HasMany(n => n.PizzasIngredients).WithOne(n => n.Ingredient);
-        }
 
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Admin", NormalizedName = "Admin".ToUpper() });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "User", NormalizedName = "User".ToUpper() });
+        }
     }
 }

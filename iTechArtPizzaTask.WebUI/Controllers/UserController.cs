@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,26 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpGet("async")]
-        public async Task<List<User>> GetAllAsync()
+        [Authorize(Roles = "Admin")]
+        public async Task<List<User>> GetAllAsync(int page = 1, int pageSize = 2)
         {
-            return await userService.GetAllAsync();
+            List<User> users = await userService.GetAllAsync();
+
+            var items = users.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return items;
         }
 
         [HttpPost("async")]
-        public async Task<ActionResult<User>> AddAsync(User user)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<User>> AddAsync(string name, string email)
         {
+            User user = new User()
+            {
+                Name = name,
+                Email = email,
+                UserName = email,
+            };
             await userService.AddAsync(user);
             return Ok();
         }

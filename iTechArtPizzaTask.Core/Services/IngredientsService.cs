@@ -36,5 +36,15 @@ namespace iTechArtPizzaTask.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Ingredient> FindItemByNameAsync(string name)
+        {
+            return await repository.FindItemByNameAsync(name);
+        }
+
+        public Task<Ingredient> FindItemByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

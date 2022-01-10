@@ -22,7 +22,11 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         {
             if(context.Ingredients.Where(b => b.IngredientName == ingridient.IngredientName).Count() == 0)
             {
-                await context.Ingredients.AddAsync(new Ingredient { IngredientName = ingridient.IngredientName });
+                await context.Ingredients.AddAsync(new Ingredient 
+                { 
+                    IngredientName = ingridient.IngredientName,
+                    IngredientCost = ingridient.IngredientCost
+                });
                 await context.SaveChangesAsync();
             }
         }
@@ -30,6 +34,18 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         public Task DeleteAsync(Ingredient item)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<Ingredient> FindItemByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Ingredient> FindItemByNameAsync(string name)
+        {
+            Ingredient ingredient = await context.Ingredients.FirstOrDefaultAsync(b => b.IngredientName == name);
+                
+            return ingredient; 
         }
 
         public async Task<List<Ingredient>> GetAllAsync()

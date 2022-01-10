@@ -29,8 +29,7 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             {
                 await context.Pizzas.AddAsync(new Pizza
                 {
-                    PizzaName = pizza.PizzaName,
-                    PizzaCost = pizza.PizzaCost
+                    PizzaName = pizza.PizzaName
                 }
                 );
                 await context.SaveChangesAsync();
@@ -43,7 +42,20 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Pizza item)
+        public async Task UpdateAsync(Pizza pizza)
+        {
+            context.Pizzas.Update(pizza);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Pizza> FindItemByNameAsync(string name)
+        {
+            Pizza pizza = await context.Pizzas.FirstOrDefaultAsync(b => b.PizzaName == name);
+
+            return pizza;
+        }
+
+        public Task<Pizza> FindItemByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }

@@ -12,5 +12,7 @@ namespace iTechArtPizzaTask.Core.Interfaces
         Task AddAsync(T item);
         Task UpdateAsync(T item);
         Task DeleteAsync(T item);
+        Task<T> FindItemByNameAsync(string name);
+        Task<T> FindItemByIdAsync(Guid id);
     }
 }

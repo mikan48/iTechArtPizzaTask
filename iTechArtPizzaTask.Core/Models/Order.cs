@@ -20,7 +20,7 @@ namespace iTechArtPizzaTask.Core.Models
         public double OrderCost { get; set; }
         public string DestinationAddress { get; set; }
         public string OrderCommentary { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
         public ICollection<OrderedPizza> OrderedPizzas { get; set; }
     }

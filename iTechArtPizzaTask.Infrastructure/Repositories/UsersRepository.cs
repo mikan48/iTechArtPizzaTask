@@ -29,6 +29,16 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
+        public Task<User> FindItemByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> FindItemByNameAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<User>> GetAllAsync()
         {
             return await context.Users.ToListAsync();

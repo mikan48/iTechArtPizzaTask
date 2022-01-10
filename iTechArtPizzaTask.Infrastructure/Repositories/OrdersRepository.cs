@@ -28,6 +28,17 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<Order> FindItemByIdAsync(Guid id)
+        {
+            Order order = await context.Orders.FindAsync(id);
+            return order;
+        }
+
+        public Task<Order> FindItemByNameAsync(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Order>> GetAllAsync()
         {
             return await context.Orders.ToListAsync();
