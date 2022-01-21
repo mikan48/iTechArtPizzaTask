@@ -33,15 +33,31 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 
         [HttpPost("async")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<User>> AddAsync(string name, string email)
+        public async Task<ActionResult<User>> AddAsync(string firstName, string lastName, string email)
         {
             User user = new User()
             {
-                Name = name,
+                FirstName = firstName,
+                LastName = lastName,
                 Email = email,
                 UserName = email,
             };
             await userService.AddAsync(user);
+            return Ok();
+        }
+
+        [HttpDelete("async")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<User>> DeleteAsync(Guid userId)
+        {
+            User user = await userService.FindItemByIdAsync(userId);
+            if(user == null)
+            {
+                return BadRequest("User doesn't exist");
+            }
+
+            await userService.DeleteAsync(user);
+
             return Ok();
         }
     }

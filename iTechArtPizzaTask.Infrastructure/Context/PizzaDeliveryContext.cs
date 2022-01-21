@@ -19,10 +19,8 @@ namespace iTechArtPizzaTask.Infrastructure.Context
         public DbSet<OrderedPizza> OrderedPizzas { get; set; }
         public DbSet<PizzasIngredient> PizzasIngredients { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=pizzadeliverydb;Trusted_Connection=True;");
-        }
+        public PizzaDeliveryContext(DbContextOptions<PizzaDeliveryContext> options) : base(options)
+        {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -10,8 +10,8 @@ using iTechArtPizzaTask.Infrastructure.Context;
 namespace iTechArtPizzaTask.Infrastructure.Migrations
 {
     [DbContext(typeof(PizzaDeliveryContext))]
-    [Migration("20211212203029_Identity")]
-    partial class Identity
+    [Migration("20220121000809_smallUpd")]
+    partial class smallUpd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,41 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "29fc871e-cd3e-4fda-850d-4857adc1cfe9",
+                            ConcurrencyStamp = "244f703f-ff1b-4118-ae9c-8241b30a20d2",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "e7341267-4c4d-499a-b5a7-186ab2c50dc8",
+                            ConcurrencyStamp = "2cd2d383-9310-4d2d-b7a3-28768cdb4999",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
@@ -194,17 +229,14 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("UserId1")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PromoCodeId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -317,14 +349,17 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -425,7 +460,9 @@ namespace iTechArtPizzaTask.Infrastructure.Migrations
 
                     b.HasOne("iTechArtPizzaTask.Core.Models.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

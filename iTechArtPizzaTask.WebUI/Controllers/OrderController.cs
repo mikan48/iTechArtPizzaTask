@@ -15,10 +15,12 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IService<Order> ordersService;
+        private readonly IService<PromoCode> promocodesService;
 
-        public OrderController(IService<Order> ordersService)
+        public OrderController(IService<Order> ordersService, IService<PromoCode> promocodesService)
         {
             this.ordersService = ordersService;
+            this.promocodesService = promocodesService;
         }
 
         [HttpGet("async")]
@@ -35,12 +37,42 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [HttpPut("async")]
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> Ordering(Guid id, Guid userId, DeliveryMethod deliveryMethod, Payment payment,
-                                                        string adress, string commentary)
+                                                        string adress, string commentary, string promocode)
         {
             Order order = await ordersService.FindItemByIdAsync(id);
             if (order == null)
             {
                 return BadRequest("Order doesn't exist");
+            }
+
+            double discount; 
+            if (promocode == null)
+            {
+                discount = 0;
+            }
+            else
+            {
+                PromoCode code = await promocodesService.FindItemByNameAsync(promocode);
+                if (code == null)
+                {
+                    return BadRequest("Promocode doesn't exist");
+                }
+                else
+                {
+                    DateTime time = DateTime.Now;
+                    if (time > code.EndDate)
+                    {
+                        return BadRequest("Promo code expired");
+                    }
+                    else if (time < code.StartDate)
+                    {
+                        return BadRequest("Promo code isn't active yet");
+                    }
+                    else
+                    {
+                        discount = code.Discount;
+                    }
+                }
             }
 
             order.UserId = userId;
@@ -49,6 +81,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             order.DestinationAddress = adress;
             order.OrderCommentary = commentary;
             order.Status = OrderStatuses.ORDERED;
+            order.OrderCost *= (1 - discount);
 
             await ordersService.AddAsync(order);
             return Ok();

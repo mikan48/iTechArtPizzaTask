@@ -15,11 +15,13 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     {
         private readonly IService<Order> cartService;
         private readonly IService<Pizza> pizzasService;
+        private readonly IService<OrderedPizza> orderedPizzasService;
 
-        public CartController(IService<Order> cartService, IService<Pizza> pizzasService)
+        public CartController(IService<Order> cartService, IService<Pizza> pizzasService, IService<OrderedPizza> orderedPizzasService)
         {
             this.cartService = cartService;
             this.pizzasService = pizzasService;
+            this.orderedPizzasService = orderedPizzasService;
         }
 
         [HttpGet("async")]
@@ -49,12 +51,12 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 
         [HttpPut("async")]
         [Authorize(Roles = "Admin, User")]
-        public async Task<ActionResult<Order>> AddPizzaInCart(string pizzaName, int quantity, Guid id)
+        public async Task<ActionResult<Order>> AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId)
         {
-            Order order = await cartService.FindItemByIdAsync(id);
+            Order order = await cartService.FindItemByIdAsync(cartId);
             if(order == null)
             {
-                return BadRequest("Order doesn't exist");
+                return BadRequest("Cart doesn't exist");
             }
 
             Pizza pizza;
@@ -74,6 +76,8 @@ namespace iTechArtPizzaTask.WebUI.Controllers
                 OrderId = order.Id
             };
 
+            await orderedPizzasService.AddAsync(orderedPizza);
+
             List<OrderedPizza> orderedPizzas = new();
             orderedPizzas.Add(orderedPizza);
 
@@ -85,6 +89,47 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 
             return Ok();
         }
+
+        //[HttpPut("async")]
+        //[Authorize(Roles = "Admin, User")]
+        //public async Task<ActionResult<Order>> EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId)
+        //{
+        //    Order order = await cartService.FindItemByIdAsync(cartId);
+        //    if (order == null)
+        //    {
+        //        return BadRequest("Cart doesn't exist");
+        //    }
+
+        //    Pizza pizza;
+
+        //    pizza = await pizzasService.FindItemByNameAsync(pizzaName);
+        //    if (pizza == null)
+        //    {
+        //        return BadRequest("Pizza doesn't exist");
+        //    }
+
+        //    return Ok();
+        //}
+
+        //[HttpPut("async")]
+        //[Authorize(Roles = "Admin, User")]
+        //public async Task<ActionResult<Order>> DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
+        //{
+        //    Order order = await cartService.FindItemByIdAsync(cartId);
+        //    if (order == null)
+        //    {
+        //        return BadRequest("Cart doesn't exist");
+        //    }
+
+        //    Pizza pizza = await pizzasService.FindItemByNameAsync(pizzaName);
+        //    if (pizza == null)
+        //    {
+        //        return BadRequest("Pizza doesn't exist");
+        //    }
+
+
+        //    return Ok();
+        //}
 
 
         [HttpDelete("async")]

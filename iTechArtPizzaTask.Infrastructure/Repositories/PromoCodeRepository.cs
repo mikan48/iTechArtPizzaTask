@@ -37,9 +37,11 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<PromoCode> FindItemByNameAsync(string name)
+        public async Task<PromoCode> FindItemByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            PromoCode code = await context.PromoCodes.FirstOrDefaultAsync(b => b.Code == name);
+
+            return code;
         }
 
         public async Task<List<PromoCode>> GetAllAsync()

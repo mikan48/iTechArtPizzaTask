@@ -22,7 +22,7 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(PizzasIngredient item)
+        public Task DeleteAsync(PizzasIngredient pizzasIngredient)
         {
             throw new NotImplementedException();
         }

@@ -18,9 +18,9 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             this.context = context;
         }
 
-        public Task AddAsync(Order order)
+        public async Task AddAsync(Order order)
         {
-            throw new NotImplementedException();
+            await context.AddAsync(order);
         }
 
         public Task DeleteAsync(Order order)
@@ -31,7 +31,14 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         public async Task<Order> FindItemByIdAsync(Guid id)
         {
             Order order = await context.Orders.FindAsync(id);
-            return order;
+            if(order.Status == OrderStatuses.INCOMPLETE)
+            {
+                return order;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public Task<Order> FindItemByNameAsync(string name)

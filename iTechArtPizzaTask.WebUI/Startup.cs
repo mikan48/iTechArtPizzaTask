@@ -52,7 +52,8 @@ namespace iTechArtPizzaTask.WebUI
             services.AddScoped<IRepository<Order>, CartsRepository>();
             services.AddScoped<IRepository<User>, UsersRepository>();
             services.AddScoped<IRepository<PizzasIngredient>, PizzasIngredientsRepository>();
-            services.AddDbContext<PizzaDeliveryContext>();
+            services.AddDbContext<PizzaDeliveryContext>(options => options.UseSqlServer(
+                                                        "Server=(localdb)\\mssqllocaldb;Database=pizzadeliverydb;Trusted_Connection=True;"));
 
             //WebUI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -74,6 +75,30 @@ namespace iTechArtPizzaTask.WebUI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "iTechArtPizzaTask", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
         }
 

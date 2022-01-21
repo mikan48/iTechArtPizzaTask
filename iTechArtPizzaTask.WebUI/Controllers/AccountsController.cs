@@ -41,7 +41,8 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             {
                 Email = model.Email,
                 UserName = model.Email,
-                Name = model.Name
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if(!result.Succeeded)
@@ -69,7 +70,8 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim("id", user.Id.ToString()),
-                new Claim("name", user.Name),
+                new Claim("first name", user.FirstName),
+                new Claim("last name", user.LastName),
                 new Claim("role", roles.FirstOrDefault() ?? "")
             };
 

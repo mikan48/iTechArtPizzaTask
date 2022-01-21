@@ -26,9 +26,9 @@ namespace iTechArtPizzaTask.Core.Services
             await repository.DeleteAsync(user);
         }
 
-        public Task<User> FindItemByIdAsync(Guid id)
+        public async Task<User> FindItemByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await repository.FindItemByIdAsync(id);
         }
 
         public Task<User> FindItemByNameAsync(string name)

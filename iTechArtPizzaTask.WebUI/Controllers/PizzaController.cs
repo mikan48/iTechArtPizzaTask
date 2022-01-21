@@ -53,6 +53,8 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             return Ok();
         }
 
+        //
+
         [HttpPut("async")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Pizza>> AddIngredientsAsync(string pizzaName, string[] ingridientNames)
@@ -114,11 +116,16 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Pizza>> DeleteAsync(string pizzaName)
         {
-            await pizzasService.DeleteAsync(new Pizza()
+            Pizza pizza;
+
+            pizza = await pizzasService.FindItemByNameAsync(pizzaName);
+            if (pizza == null)
             {
-                PizzaName = pizzaName
+                return BadRequest("Pizza doesn't exist");
             }
-                );
+
+            await pizzasService.DeleteAsync(pizza);
+
             return Ok();
         }
     }
