@@ -38,6 +38,11 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public List<Ingredient> FindItemsById(Guid orderId)
+        {
+            return context.OrderedPizzas.Where(b => b.OrderId == orderId).ToList();
+        }
+
         public Task<List<OrderedPizza>> GetAllAsync()
         {
             throw new NotImplementedException();

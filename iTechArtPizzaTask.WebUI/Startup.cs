@@ -42,7 +42,9 @@ namespace iTechArtPizzaTask.WebUI
             services.AddScoped<IService<Order>, OrdersService>();
             services.AddScoped<IService<Order>, CartsService>();
             services.AddScoped<IService<User>, UsersService>();
+            services.AddScoped<IService<PromoCode>, PromoCodeService>();
             services.AddScoped<IService<PizzasIngredient>, PizzasIngredientsService>();
+            services.AddScoped<IService<OrderedPizza>, OrderedPizzasService>();
 
             //Infrastructure
             //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
@@ -51,7 +53,9 @@ namespace iTechArtPizzaTask.WebUI
             services.AddScoped<IRepository<Order>, OrdersRepository>();
             services.AddScoped<IRepository<Order>, CartsRepository>();
             services.AddScoped<IRepository<User>, UsersRepository>();
+            services.AddScoped<IRepository<PromoCode>, PromoCodeRepository>();
             services.AddScoped<IRepository<PizzasIngredient>, PizzasIngredientsRepository>();
+            services.AddScoped<IRepository<OrderedPizza>, OrderedPizzasRepository>();
             services.AddDbContext<PizzaDeliveryContext>(options => options.UseSqlServer(
                                                         "Server=(localdb)\\mssqllocaldb;Database=pizzadeliverydb;Trusted_Connection=True;"));
 

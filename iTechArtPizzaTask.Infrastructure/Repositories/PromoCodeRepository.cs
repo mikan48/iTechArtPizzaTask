@@ -44,6 +44,11 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             return code;
         }
 
+        public List<PromoCode> FindItemsById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<PromoCode>> GetAllAsync()
         {
             return await context.PromoCodes.ToListAsync();

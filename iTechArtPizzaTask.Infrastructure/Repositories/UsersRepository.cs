@@ -40,6 +40,11 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public List<User> FindItemsById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<User>> GetAllAsync()
         {
             return await context.Users.ToListAsync();

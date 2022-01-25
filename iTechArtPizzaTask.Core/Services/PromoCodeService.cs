@@ -43,5 +43,10 @@ namespace iTechArtPizzaTask.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public List<PromoCode> FindItemsById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

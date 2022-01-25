@@ -1,10 +1,12 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.WebUI.Controllers
@@ -24,16 +26,6 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             this.orderedPizzasService = orderedPizzasService;
         }
 
-        [HttpGet("async")]
-        [Authorize(Roles = "Admin, User")]
-        public async Task<List<Order>> GetAllAsync(int page = 1, int pageSize = 2)
-        {
-            List<Order> orders = await cartService.GetAllAsync();
-
-            var items = orders.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-            return items;
-        }
 
         [HttpPost("async")]
         [Authorize(Roles = "Admin, User")]
@@ -46,6 +38,26 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             };
             await cartService.AddAsync(order);
             return Ok();
+        }
+
+        [HttpGet("async")]
+        [Authorize(Roles = "Admin, User")]
+        public async Task<List<Pizza>> GetAllPizzasInCartAsync(Guid cartId, int page = 1, int pageSize = 2)
+        {
+            Order order = await cartService.FindItemByIdAsync(cartId);
+
+            List<OrderedPizza> orderedPizzas = orderedPizzasService.FindItemsById(order.Id);
+            List<Pizza> pizzas = new();
+            Pizza pizza;
+            foreach(OrderedPizza orderedPizza in orderedPizzas)
+            {
+                pizza = await pizzasService.FindItemByIdAsync(orderedPizza.PizzaId);
+                pizzas.Add(pizza);
+            }
+
+            var items = pizzas.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return items;
         }
 
 
@@ -90,58 +102,74 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             return Ok();
         }
 
-        //[HttpPut("async")]
-        //[Authorize(Roles = "Admin, User")]
-        //public async Task<ActionResult<Order>> EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId)
-        //{
-        //    Order order = await cartService.FindItemByIdAsync(cartId);
-        //    if (order == null)
-        //    {
-        //        return BadRequest("Cart doesn't exist");
-        //    }
+        [HttpPatch("async")]
+        [Authorize(Roles = "Admin, User")]
+        public async Task<ActionResult<Order>> EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId)
+        {
+            Order order = await cartService.FindItemByIdAsync(cartId);
+            if (order == null)
+            {
+                return BadRequest("Cart doesn't exist");
+            }
 
-        //    Pizza pizza;
+            Pizza pizza;
 
-        //    pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-        //    if (pizza == null)
-        //    {
-        //        return BadRequest("Pizza doesn't exist");
-        //    }
+            pizza = await pizzasService.FindItemByNameAsync(pizzaName);
+            if (pizza == null)
+            {
+                return BadRequest("Pizza doesn't exist");
+            }
 
-        //    return Ok();
-        //}
+            int oldQuantity = 0;
 
-        //[HttpPut("async")]
-        //[Authorize(Roles = "Admin, User")]
-        //public async Task<ActionResult<Order>> DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
-        //{
-        //    Order order = await cartService.FindItemByIdAsync(cartId);
-        //    if (order == null)
-        //    {
-        //        return BadRequest("Cart doesn't exist");
-        //    }
+            List<OrderedPizza> orderedPizzas = orderedPizzasService.FindItemsById(cartId);
+            foreach(OrderedPizza orderedPizza in orderedPizzas)
+            {
+                if(orderedPizza.PizzaId == pizza.Id)
+                {
+                    oldQuantity = orderedPizza.Quantity;
+                    orderedPizza.Quantity = quantity;
+                    await orderedPizzasService.UpdateAsync(orderedPizza);
+                }
+            }
 
-        //    Pizza pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-        //    if (pizza == null)
-        //    {
-        //        return BadRequest("Pizza doesn't exist");
-        //    }
+            order.OrderCost += (quantity - oldQuantity) * pizza.PizzaCost;
+            await cartService.UpdateAsync(order);
 
-
-        //    return Ok();
-        //}
-
+            return Ok();
+        }
 
         [HttpDelete("async")]
         [Authorize(Roles = "Admin, User")]
-        public async Task<ActionResult<Order>> DeleteAsync(Guid id)
+        public async Task<ActionResult<Order>> DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
         {
-            Order order = await cartService.FindItemByIdAsync(id);
+            Order order = await cartService.FindItemByIdAsync(cartId);
             if (order == null)
             {
-                return BadRequest("Order doesn't exist");
+                return BadRequest("Cart doesn't exist");
             }
-            await cartService.DeleteAsync(order);
+
+            Pizza pizza = await pizzasService.FindItemByNameAsync(pizzaName);
+            if (pizza == null)
+            {
+                return BadRequest("Pizza doesn't exist");
+            }
+
+            int quantity = 0;
+
+            List<OrderedPizza> orderedPizzas = orderedPizzasService.FindItemsById(cartId);
+            foreach (OrderedPizza orderedPizza in orderedPizzas)
+            {
+                if (orderedPizza.PizzaId == pizza.Id)
+                {
+                    quantity = orderedPizza.Quantity;
+                    await orderedPizzasService.DeleteAsync(orderedPizza);
+                }
+            }
+
+            order.OrderCost -= quantity * pizza.PizzaCost;
+            await cartService.UpdateAsync(order);
+
             return Ok();
         }
     }
