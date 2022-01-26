@@ -38,7 +38,7 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Ingredient> FindItemsById(Guid orderId)
+        public List<OrderedPizza> FindItemsById(Guid orderId)
         {
             return context.OrderedPizzas.Where(b => b.OrderId == orderId).ToList();
         }

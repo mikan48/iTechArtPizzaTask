@@ -24,7 +24,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpGet("async")]
-        //[Authorize(Roles = "Admin, User")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<List<Order>> GetAllAsync(int page = 1, int pageSize = 2)
         {
             List<Order> orders = await ordersService.GetAllAsync();

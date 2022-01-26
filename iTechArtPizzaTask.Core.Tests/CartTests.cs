@@ -100,7 +100,7 @@ namespace iTechArtPizzaTask.Core.Tests
             var testRepo = new OrderedPizzasRepository(_context);
 
             // Act
-            var orderedPizzas = testRepo.FindItemsById(order.Id).GetAwaiter().GetResult();
+            var orderedPizzas = testRepo.FindItemsById(order.Id);
             OrderedPizza editedPizza = null;
             foreach(OrderedPizza ordered in orderedPizzas)
             {
@@ -152,7 +152,7 @@ namespace iTechArtPizzaTask.Core.Tests
             var testRepo = new OrderedPizzasRepository(_context);
 
             // Act
-            var orderedPizzas = testRepo.FindItemsById(order.Id).GetAwaiter().GetResult();
+            var orderedPizzas = testRepo.FindItemsById(order.Id);
             OrderedPizza editedPizza = null;
             foreach (OrderedPizza ordered in orderedPizzas)
             {

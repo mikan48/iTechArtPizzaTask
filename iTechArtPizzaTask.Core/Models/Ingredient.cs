@@ -10,6 +10,7 @@ namespace iTechArtPizzaTask.Core.Models
 {
     public class Ingredient : BaseEntity
     {
+        [Required(ErrorMessage = "Ingredient must have name")]
         public string IngredientName { get; set; }
         [Column(TypeName = "money")]
         public double IngredientCost { get; set; }

@@ -69,17 +69,18 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             List<Claim> claims = new List<Claim>
             {
-                new Claim("id", user.Id.ToString()),
-                new Claim("first name", user.FirstName),
-                new Claim("last name", user.LastName),
-                new Claim("role", roles.FirstOrDefault() ?? "")
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.GivenName, user.FirstName),
+                new Claim(ClaimTypes.Surname, user.LastName),
+                new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "")
             };
 
             var authSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.Now.AddHours(1),
+                expires: DateTime.Now.AddHours(3),
                 claims: claims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
@@ -87,9 +88,26 @@ namespace iTechArtPizzaTask.WebUI.Controllers
             return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo,
+                    id = user.Id
                 }
             );
+        }
+
+        [HttpDelete("/delete")]
+        public async Task<ActionResult> DeleteAccountAsync()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+
+                return Ok("Account deleted");
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

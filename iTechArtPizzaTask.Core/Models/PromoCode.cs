@@ -10,7 +10,10 @@ namespace iTechArtPizzaTask.Core.Models
 {
     public class PromoCode : BaseEntity
     {
+        [Required(ErrorMessage = "Please enter the code")]
         public string Code { get; set; }
+
+        [Required(ErrorMessage = "Promo code must have a discount")]
         public double Discount { get; set; }
 
         [Column(TypeName = "smalldatetime")]

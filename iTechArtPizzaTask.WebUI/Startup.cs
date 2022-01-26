@@ -66,11 +66,9 @@ namespace iTechArtPizzaTask.WebUI
                         options.RequireHttpsMetadata = false;
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            ValidateIssuer = true,
-                            ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"]))
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SecretKey"]))
                         };
                     });
             services.AddIdentity<User, IdentityRole<Guid>>()
@@ -82,13 +80,13 @@ namespace iTechArtPizzaTask.WebUI
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter token",
-                    Name = "Authorization",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
-                    Scheme = "bearer"
+                    In = ParameterLocation.Header,
+                    Scheme = "bearer",
+                    Description = "Please insert JWT token into field"
                 });
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -96,11 +94,11 @@ namespace iTechArtPizzaTask.WebUI
                         {
                             Reference = new OpenApiReference
                             {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
                             }
                         },
-                        new string[]{}
+                        new string[] { }
                     }
                 });
             });
