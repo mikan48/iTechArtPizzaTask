@@ -2,6 +2,7 @@
 using iTechArtPizzaTask.Core.Models;
 using iTechArtPizzaTask.Core.Services;
 using iTechArtPizzaTask.Infrastructure.Context;
+using iTechArtPizzaTask.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,23 +18,18 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class PizzaController : ControllerBase
     {
-        private readonly IService<Pizza> pizzasService;
-        private readonly IService<Ingredient> ingredientService;
-        private readonly IService<PizzasIngredient> pizzasIngredientService;
+        private readonly IPizzasService pizzasService;
 
-        public PizzaController(IService<Pizza> pizzasService, IService<Ingredient> ingredientService,
-                                IService<PizzasIngredient> pizzasIngredientService)
+        public PizzaController(IPizzasService pizzasService)
         {
             this.pizzasService = pizzasService;
-            this.ingredientService = ingredientService;
-            this.pizzasIngredientService = pizzasIngredientService;
         }
 
         [HttpGet("async")]
         [Authorize(Roles = "Admin, User")]
-        public async Task<List<Pizza>> GetAllAsync(int page = 1, int pageSize = 2)
+        public async Task<List<PizzaViewModel>> GetAllPizzasAsync(int page = 1, int pageSize = 2)
         {
-            List<Pizza> pizzas = await pizzasService.GetAllAsync();            
+            List<PizzaViewModel> pizzas = await pizzasService.GetAllPizzasAsync();            
 
             var items = pizzas.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -42,72 +38,18 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 
         [HttpPost("async")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Pizza>> AddAsync(string pizzaName)
+        public async Task<ActionResult<Pizza>> AddPizzaAsync(string pizzaName)
         {
-            Pizza pizza = new Pizza()
-            {
-                PizzaName = pizzaName
-            };
-            await pizzasService.AddAsync(pizza);
+            await pizzasService.AddPizzaAsync(pizzaName);
 
             return Ok();
         }
 
-        //
-
         [HttpPut("async")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<Pizza>> AddIngredientsAsync(string pizzaName, string[] ingridientNames)
+        public async Task<ActionResult<Pizza>> AddPizzasIngredientsAsync(string pizzaName, string[] ingridientNames)
         {
-            Pizza pizza;
-
-            pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-            if(pizza == null)
-            {
-                return BadRequest("Pizza doesn't exist");
-            }
-
-            Ingredient ingredient;
-            List<Ingredient> ingredients = new();
-            List<PizzasIngredient> pizzasIngredients = new();
-            PizzasIngredient pizzasIngredient;
-
-            double cost;
-            if (pizza.PizzaCost != 0)
-            {
-                cost = pizza.PizzaCost;
-            }
-            else
-            {
-                cost = 0;
-            }
-
-            for(int i = 0; i < ingridientNames.Length; i++)
-            {
-                ingredient = await ingredientService.FindItemByNameAsync(ingridientNames[i]);
-                if(ingredient != null)
-                {
-                    ingredients.Add(ingredient);
-                }
-            }
-            foreach (Ingredient ingred in ingredients)
-            {
-                cost += ingred.IngredientCost;
-                pizzasIngredient = new PizzasIngredient
-                {
-                    PizzaId = pizza.Id,
-                    IngredientId = ingred.Id,
-                    ingredientCost = ingred.IngredientCost
-                };
-                await pizzasIngredientService.AddAsync(pizzasIngredient);
-                pizzasIngredients.Add(pizzasIngredient);
-            }
-
-            pizza.PizzaName = pizzaName;
-            pizza.PizzaCost = cost;
-            pizza.PizzasIngridients = pizzasIngredients;
-
-            await pizzasService.UpdateAsync(pizza);
+            await pizzasService.AddPizzasIngredientsAsync(pizzaName, ingridientNames);
 
             return Ok();
         }
@@ -116,16 +58,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Pizza>> DeleteAsync(string pizzaName)
         {
-            Pizza pizza;
-
-            pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-            if (pizza == null)
-            {
-                return BadRequest("Pizza doesn't exist");
-            }
-
-            await pizzasService.DeleteAsync(pizza);
-
+            await pizzasService.DeletePizzaAsync(pizzaName);
             return Ok();
         }
     }

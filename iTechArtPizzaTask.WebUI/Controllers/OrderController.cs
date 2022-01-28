@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,22 +15,20 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IService<Order> ordersService;
-        private readonly IService<PromoCode> promocodesService;
+        private readonly IOrdersService ordersService;
 
-        public OrderController(IService<Order> ordersService, IService<PromoCode> promocodesService)
+        public OrderController(IOrdersService ordersService)
         {
             this.ordersService = ordersService;
-            this.promocodesService = promocodesService;
         }
 
         [HttpGet("async")]
         [Authorize(Roles = "Admin, User")]
-        public async Task<List<Order>> GetAllAsync(int page = 1, int pageSize = 2)
+        public async Task<List<OrderViewModel>> GetAllAsync(int page = 1, int pageSize = 2)
         {
-            List<Order> orders = await ordersService.GetAllAsync();
+            List<OrderViewModel> orderVMs = await ordersService.GetAllAsync();
 
-            var items = orders.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var items = orderVMs.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             return items;
         }
@@ -39,51 +38,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         public async Task<ActionResult<Order>> Ordering(Guid id, Guid userId, DeliveryMethod deliveryMethod, Payment payment,
                                                         string adress, string commentary, string promocode)
         {
-            Order order = await ordersService.FindItemByIdAsync(id);
-            if (order == null)
-            {
-                return BadRequest("Order doesn't exist");
-            }
-
-            double discount; 
-            if (promocode == null)
-            {
-                discount = 0;
-            }
-            else
-            {
-                PromoCode code = await promocodesService.FindItemByNameAsync(promocode);
-                if (code == null)
-                {
-                    return BadRequest("Promocode doesn't exist");
-                }
-                else
-                {
-                    DateTime time = DateTime.Now;
-                    if (time > code.EndDate)
-                    {
-                        return BadRequest("Promo code expired");
-                    }
-                    else if (time < code.StartDate)
-                    {
-                        return BadRequest("Promo code isn't active yet");
-                    }
-                    else
-                    {
-                        discount = code.Discount;
-                    }
-                }
-            }
-
-            order.UserId = userId;
-            order.DeliveryMethod = deliveryMethod;
-            order.Payment = payment;
-            order.DestinationAddress = adress;
-            order.OrderCommentary = commentary;
-            order.Status = OrderStatuses.ORDERED;
-            order.OrderCost *= (1 - discount);
-
-            await ordersService.AddAsync(order);
+            await ordersService.Ordering(id, userId, deliveryMethod, payment, adress, commentary, promocode);
             return Ok();
         }
     }

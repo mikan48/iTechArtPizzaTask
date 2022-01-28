@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,19 +14,19 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class IngredientController : ControllerBase
     {
-        private readonly IService<Ingredient> ingridientsService;
-        public IngredientController(IService<Ingredient> ingridientsService)
+        private readonly IIngredientsService ingridientsService;
+        public IngredientController(IIngredientsService ingridientsService)
         {
             this.ingridientsService = ingridientsService;
         }
 
         [HttpGet("async")]
         [Authorize(Roles = "Admin")]
-        public async Task<List<Ingredient>> GetAllAsync(int page = 1, int pageSize = 2)
+        public async Task<List<IngredientViewModel>> GetAllAsync(int page = 1, int pageSize = 2)
         {
-            List<Ingredient> ingredients = await ingridientsService.GetAllAsync();
+            List<IngredientViewModel> IngredientViewModel = await ingridientsService.GetAllAsync();
 
-            var items = ingredients.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var items = IngredientViewModel.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             return items;
         }
@@ -34,12 +35,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Ingredient>> AddAsync(string ingridientName, double ingridientCost)
         {
-            await ingridientsService.AddAsync( new Ingredient()
-            {
-                IngredientName = ingridientName,
-                IngredientCost = ingridientCost
-            }
-                );
+            await ingridientsService.AddAsync(ingridientName, ingridientCost);
             return Ok();
         }
     }

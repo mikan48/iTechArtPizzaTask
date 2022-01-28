@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,20 +14,18 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class PromoCodeController : ControllerBase
     {
-        private readonly IService<PromoCode> promocodeService;
-        private readonly IService<Order> ordersService;
+        private readonly IPromoCodesService promocodeService;
 
-        public PromoCodeController(IService<PromoCode> promocodeService, IService<Order> ordersService)
+        public PromoCodeController(IPromoCodesService promocodeService)
         {
             this.promocodeService = promocodeService;
-            this.ordersService = ordersService;
         }
 
         [HttpGet("async")]
         [Authorize(Roles = "Admin")]
-        public async Task<List<PromoCode>> GetAllAsync(int page = 1, int pageSize = 2)
+        public async Task<List<PromoCodeViewModel>> GetAllAsync(int page = 1, int pageSize = 2)
         {
-            List<PromoCode> promoCodes = await promocodeService.GetAllAsync();
+            List<PromoCodeViewModel> promoCodes = await promocodeService.GetAllAsync();
 
             var items = promoCodes.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
@@ -37,14 +36,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<PromoCode>> AddAsync(string code, double discount, DateTime start, DateTime end)
         {
-            PromoCode promoCode = new PromoCode()
-            {
-                Code = code,
-                Discount = discount,
-                StartDate = start,
-                EndDate = end
-            };
-            await promocodeService.AddAsync(promoCode);
+            await promocodeService.AddAsync(code, discount, start, end);
 
             return Ok();
         }
@@ -53,20 +45,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<PromoCode>> AddPromoCodeToOrder(Guid orderId, string code)
         {
-            Order order = await ordersService.FindItemByIdAsync(orderId);
-            if(order == null)
-            {
-                return BadRequest("Order doesn't exist");
-            }
-
-            PromoCode promoCode = await promocodeService.FindItemByNameAsync(code);
-            if (promoCode == null)
-            {
-                return BadRequest("Promo Code doesn't exist");
-            }
-
-            order.OrderCost *= (1 - promoCode.Discount);
-            await ordersService.UpdateAsync(order);
+            await promocodeService.AddPromoCodeToOrder(orderId, code);
 
             return Ok();
         }

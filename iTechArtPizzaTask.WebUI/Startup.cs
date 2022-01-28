@@ -37,21 +37,18 @@ namespace iTechArtPizzaTask.WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             //Core
-            services.AddScoped<IService<Pizza>, PizzasService>();
-            services.AddScoped<IService<Ingredient>, IngredientsService>();
-            services.AddScoped<IService<Order>, OrdersService>();
-            services.AddScoped<IService<Order>, CartsService>();
-            services.AddScoped<IService<User>, UsersService>();
-            services.AddScoped<IService<PromoCode>, PromoCodeService>();
-            services.AddScoped<IService<PizzasIngredient>, PizzasIngredientsService>();
-            services.AddScoped<IService<OrderedPizza>, OrderedPizzasService>();
+            services.AddScoped<IPizzasService, PizzasService>();
+            services.AddScoped<IIngredientsService, IngredientsService>();
+            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<ICartService, CartsService>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IPromoCodesService, PromoCodeService>();
 
             //Infrastructure
             //services.AddScoped<IPizzasRepository, FakePizzasRepository>();
             services.AddScoped<IRepository<Pizza>, PizzasRepository>();
             services.AddScoped<IRepository<Ingredient>, IngredientsRepository>();
             services.AddScoped<IRepository<Order>, OrdersRepository>();
-            services.AddScoped<IRepository<Order>, CartsRepository>();
             services.AddScoped<IRepository<User>, UsersRepository>();
             services.AddScoped<IRepository<PromoCode>, PromoCodeRepository>();
             services.AddScoped<IRepository<PizzasIngredient>, PizzasIngredientsRepository>();

@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,47 +9,36 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class IngredientsService : IService<Ingredient>
+    public class IngredientsService : IIngredientsService
     {
-        private readonly IRepository<Ingredient> repository;
-        public IngredientsService(IRepository<Ingredient> repository)
+        private readonly IRepository<Ingredient> ingredientRepository;
+        public IngredientsService(IRepository<Ingredient> ingredientRepository)
         {
-            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.ingredientRepository = ingredientRepository ?? throw new ArgumentNullException(nameof(ingredientRepository));
         }
 
-        public async Task<List<Ingredient>> GetAllAsync()
+        public async Task<List<IngredientViewModel>> GetAllAsync()
         {
-            return await repository.GetAllAsync();
+            List<Ingredient> ingredients = await ingredientRepository.GetAllAsync();
+            List<IngredientViewModel> ingredientVMs = new();
+            if (ingredients != null)
+            {
+                foreach (Ingredient ingredient in ingredients)
+                {
+                    ingredientVMs.Add(new IngredientViewModel { IngredientName = ingredient.IngredientName });
+                }
+            }
+            return ingredientVMs;
         }
 
-        public async Task AddAsync(Ingredient ingredient)
+        public async Task AddAsync(string ingridientName, double ingridientCost)
         {
-            await repository.AddAsync(ingredient);
-        }
-
-        public Task UpdateAsync(Ingredient item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(Ingredient item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Ingredient> FindItemByNameAsync(string name)
-        {
-            return await repository.FindItemByNameAsync(name);
-        }
-
-        public Task<Ingredient> FindItemByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Ingredient> FindItemsById(Guid id)
-        {
-            throw new NotImplementedException();
+            await ingredientRepository.AddAsync(new Ingredient()
+            {
+                IngredientName = ingridientName,
+                IngredientCost = ingridientCost
+            }
+                );
         }
     }
 }

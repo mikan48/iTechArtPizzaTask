@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.WebUI.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,47 +16,28 @@ namespace iTechArtPizzaTask.WebUI.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private readonly IService<Order> cartService;
-        private readonly IService<Pizza> pizzasService;
-        private readonly IService<OrderedPizza> orderedPizzasService;
+        private readonly ICartService cartService;
 
-        public CartController(IService<Order> cartService, IService<Pizza> pizzasService, IService<OrderedPizza> orderedPizzasService)
+        public CartController(ICartService cartService)
         {
             this.cartService = cartService;
-            this.pizzasService = pizzasService;
-            this.orderedPizzasService = orderedPizzasService;
         }
-
 
         [HttpPost("async")]
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> AddAsync(Guid userId)
         {
-            Order order = new Order
-            {
-                UserId = userId,
-                Status = OrderStatuses.INCOMPLETE
-            };
-            await cartService.AddAsync(order);
+            await cartService.AddAsync(userId);
             return Ok();
         }
 
         [HttpGet("async")]
         [Authorize(Roles = "Admin, User")]
-        public async Task<List<Pizza>> GetAllPizzasInCartAsync(Guid cartId, int page = 1, int pageSize = 2)
+        public async Task<List<PizzaViewModel>> GetAllPizzasInCartAsync(Guid cartId, int page = 1, int pageSize = 2)
         {
-            Order order = await cartService.FindItemByIdAsync(cartId);
+            List<PizzaViewModel> pizzaVM = await cartService.GetAllPizzasInCartAsync(cartId);
 
-            List<OrderedPizza> orderedPizzas = orderedPizzasService.FindItemsById(order.Id);
-            List<Pizza> pizzas = new();
-            Pizza pizza;
-            foreach(OrderedPizza orderedPizza in orderedPizzas)
-            {
-                pizza = await pizzasService.FindItemByIdAsync(orderedPizza.PizzaId);
-                pizzas.Add(pizza);
-            }
-
-            var items = pizzas.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var items = pizzaVM.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             return items;
         }
@@ -65,39 +47,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId)
         {
-            Order order = await cartService.FindItemByIdAsync(cartId);
-            if(order == null)
-            {
-                return BadRequest("Cart doesn't exist");
-            }
-
-            Pizza pizza;
-
-            pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-            if (pizza == null)
-            {
-                return BadRequest("Pizza doesn't exist");
-            }
-
-            double cost = pizza.PizzaCost * quantity;
-
-            OrderedPizza orderedPizza = new OrderedPizza()
-            {
-                PizzaId = pizza.Id,
-                Quantity = quantity,
-                OrderId = order.Id
-            };
-
-            await orderedPizzasService.AddAsync(orderedPizza);
-
-            List<OrderedPizza> orderedPizzas = new();
-            orderedPizzas.Add(orderedPizza);
-
-            order.OrderCost = cost;
-            order.OrderedPizzas = orderedPizzas;
-            order.Status = OrderStatuses.INCOMPLETE;
-
-            await cartService.UpdateAsync(order);
+            await cartService.AddPizzaInCartAsync(pizzaName, quantity, cartId);
 
             return Ok();
         }
@@ -106,35 +56,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId)
         {
-            Order order = await cartService.FindItemByIdAsync(cartId);
-            if (order == null)
-            {
-                return BadRequest("Cart doesn't exist");
-            }
-
-            Pizza pizza;
-
-            pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-            if (pizza == null)
-            {
-                return BadRequest("Pizza doesn't exist");
-            }
-
-            int oldQuantity = 0;
-
-            List<OrderedPizza> orderedPizzas = orderedPizzasService.FindItemsById(cartId);
-            foreach(OrderedPizza orderedPizza in orderedPizzas)
-            {
-                if(orderedPizza.PizzaId == pizza.Id)
-                {
-                    oldQuantity = orderedPizza.Quantity;
-                    orderedPizza.Quantity = quantity;
-                    await orderedPizzasService.UpdateAsync(orderedPizza);
-                }
-            }
-
-            order.OrderCost += (quantity - oldQuantity) * pizza.PizzaCost;
-            await cartService.UpdateAsync(order);
+            await cartService.EditPizzasInCartAsync(pizzaName, quantity, cartId);
 
             return Ok();
         }
@@ -143,32 +65,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
         {
-            Order order = await cartService.FindItemByIdAsync(cartId);
-            if (order == null)
-            {
-                return BadRequest("Cart doesn't exist");
-            }
-
-            Pizza pizza = await pizzasService.FindItemByNameAsync(pizzaName);
-            if (pizza == null)
-            {
-                return BadRequest("Pizza doesn't exist");
-            }
-
-            int quantity = 0;
-
-            List<OrderedPizza> orderedPizzas = orderedPizzasService.FindItemsById(cartId);
-            foreach (OrderedPizza orderedPizza in orderedPizzas)
-            {
-                if (orderedPizza.PizzaId == pizza.Id)
-                {
-                    quantity = orderedPizza.Quantity;
-                    await orderedPizzasService.DeleteAsync(orderedPizza);
-                }
-            }
-
-            order.OrderCost -= quantity * pizza.PizzaCost;
-            await cartService.UpdateAsync(order);
+            await cartService.DeletePizzaFromCartAsync(pizzaName, cartId);
 
             return Ok();
         }

@@ -1,5 +1,6 @@
 ﻿using iTechArtPizzaTask.Core.Interfaces;
 using iTechArtPizzaTask.Core.Models;
+using iTechArtPizzaTask.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,45 +9,46 @@ using System.Threading.Tasks;
 
 namespace iTechArtPizzaTask.Core.Services
 {
-    public class PromoCodeService : IService<PromoCode>
+    public class PromoCodeService : IPromoCodesService
     {
-        private readonly IRepository<PromoCode> repository;
-        public PromoCodeService(IRepository<PromoCode> repository)
+        private readonly IRepository<PromoCode> promoCodeRepository;
+        private readonly IRepository<Order> orderRepository;
+        public PromoCodeService(IRepository<PromoCode> promoCodeRepository, IRepository<Order> orderRepository)
         {
-            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.promoCodeRepository = promoCodeRepository ?? throw new ArgumentNullException(nameof(promoCodeRepository));
+            this.orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         }
-        public async Task<List<PromoCode>> GetAllAsync()
+        public async Task<List<PromoCodeViewModel>> GetAllAsync()
         {
-            return await repository.GetAllAsync();
-        }
-        public async Task AddAsync(PromoCode promoCode)
-        {
-            await repository.AddAsync(promoCode);
-        }
-
-        public Task UpdateAsync(PromoCode item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(PromoCode item)
-        {
-            throw new NotImplementedException();
+            List<PromoCode> codes = await promoCodeRepository.GetAllAsync();
+            List<PromoCodeViewModel> codesVMs = new List<PromoCodeViewModel>();
+            foreach (PromoCode code in codes)
+            {
+                codesVMs.Add(new PromoCodeViewModel { Code = code.Code, Discount = code.Discount });
+            }
+            return codesVMs;
         }
 
-        public async Task<PromoCode> FindItemByNameAsync(string name)
+        public async Task AddAsync(string code, double discount, DateTime start, DateTime end)
         {
-            return await repository.FindItemByNameAsync(name);
+            PromoCode promoCode = new PromoCode()
+            {
+                Code = code,
+                Discount = discount,
+                StartDate = start,
+                EndDate = end
+            };
+            await promoCodeRepository.AddAsync(promoCode);
         }
 
-        public Task<PromoCode> FindItemByIdAsync(Guid id)
+        public async Task AddPromoCodeToOrder(Guid orderId, string code)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<PromoCode> FindItemsById(Guid id)
-        {
-            throw new NotImplementedException();
+            Order order = await orderRepository.FindItemByIdAsync(orderId);
+            PromoCode promoCode = await promoCodeRepository.FindItemByNameAsync(code);
+            if (order != null && promoCode != null)
+            {
+                order.OrderCost *= (1 - promoCode.Discount);
+            }
         }
     }
 }
