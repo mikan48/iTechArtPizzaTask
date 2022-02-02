@@ -11,8 +11,8 @@ namespace iTechArtPizzaTask.Core.Interfaces
     {
         Task AddAsync(Guid userId);
         Task<List<PizzaViewModel>> GetAllPizzasInCartAsync(Guid cartId);
-        Task AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId);
-        Task EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId);
-        Task DeletePizzaFromCartAsync(string pizzaName, Guid cartId);
+        Task<bool> AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId);
+        Task<bool> EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId);
+        Task<bool> DeletePizzaFromCartAsync(string pizzaName, Guid cartId);
     }
 }

@@ -27,7 +27,8 @@ namespace iTechArtPizzaTask.Core.Services
             Order order = new Order
             {
                 UserId = userId,
-                Status = OrderStatuses.INCOMPLETE
+                Status = OrderStatuses.INCOMPLETE,
+                OrderCost = 0
             };
             await orderRepository.AddAsync(order);
         }
@@ -47,35 +48,58 @@ namespace iTechArtPizzaTask.Core.Services
             return pizzas;
         }
 
-        public async Task AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId)
+        public async Task<bool> AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId)
         {
             Order order = await orderRepository.FindItemByIdAsync(cartId);
             Pizza pizza = await pizzaRepository.FindItemByNameAsync(pizzaName);
             if (order != null && pizza != null)
             {
-                double cost = pizza.PizzaCost * quantity;
-
-                OrderedPizza orderedPizza = new OrderedPizza()
+                List<OrderedPizza> ordered = orderedPizzaRepository.FindItemsById(order.Id);
+                OrderedPizza orderedPizza = null;
+                foreach (OrderedPizza ordPizza in ordered)
                 {
-                    PizzaId = pizza.Id,
-                    Quantity = quantity,
-                    OrderId = order.Id
-                };
+                    if(ordPizza.PizzaId == pizza.Id)
+                    {
+                        orderedPizza = ordPizza;
+                    }
+                }
 
-                await orderedPizzaRepository.AddAsync(orderedPizza);
+                if(orderedPizza == null)
+                {
+                    double cost = pizza.PizzaCost * quantity;
 
-                List<OrderedPizza> orderedPizzas = new();
-                orderedPizzas.Add(orderedPizza);
+                    orderedPizza = new OrderedPizza()
+                    {
+                        PizzaId = pizza.Id,
+                        Quantity = quantity,
+                        OrderId = order.Id
+                    };
 
-                order.OrderCost = cost;
-                order.OrderedPizzas = orderedPizzas;
-                order.Status = OrderStatuses.INCOMPLETE;
+                    await orderedPizzaRepository.AddAsync(orderedPizza);
 
-                await orderRepository.UpdateAsync(order);
+                    List<OrderedPizza> orderedPizzas = new();
+                    orderedPizzas.Add(orderedPizza);
+
+                    order.OrderCost += cost;
+                    order.OrderedPizzas = orderedPizzas;
+                    order.Status = OrderStatuses.INCOMPLETE;
+
+                    await orderRepository.UpdateAsync(order);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public async Task EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId)
+        public async Task<bool> EditPizzasInCartAsync(string pizzaName, int quantity, Guid cartId)
         {
             Order order = await orderRepository.FindItemByIdAsync(cartId);
             Pizza pizza = await pizzaRepository.FindItemByNameAsync(pizzaName);
@@ -84,6 +108,11 @@ namespace iTechArtPizzaTask.Core.Services
                 int oldQuantity = 0;
 
                 List<OrderedPizza> orderedPizzas = orderedPizzaRepository.FindItemsById(cartId);
+                if(orderedPizzas == null)
+                {
+                    return false;
+                }
+
                 foreach (OrderedPizza orderedPizza in orderedPizzas)
                 {
                     if (orderedPizza.PizzaId == pizza.Id)
@@ -96,10 +125,16 @@ namespace iTechArtPizzaTask.Core.Services
 
                 order.OrderCost += (quantity - oldQuantity) * pizza.PizzaCost;
                 await orderRepository.UpdateAsync(order);
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public async Task DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
+        public async Task<bool> DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
         {
             Order order = await orderRepository.FindItemByIdAsync(cartId);
             Pizza pizza = await pizzaRepository.FindItemByNameAsync(pizzaName);
@@ -108,6 +143,11 @@ namespace iTechArtPizzaTask.Core.Services
                 int quantity = 0;
 
                 List<OrderedPizza> orderedPizzas = orderedPizzaRepository.FindItemsById(cartId);
+                if(orderedPizzas == null)
+                {
+                    return false;
+                }
+
                 foreach (OrderedPizza orderedPizza in orderedPizzas)
                 {
                     if (orderedPizza.PizzaId == pizza.Id)
@@ -116,10 +156,20 @@ namespace iTechArtPizzaTask.Core.Services
                         await orderedPizzaRepository.DeleteAsync(orderedPizza);
                     }
                 }
+                if(quantity == 0)
+                {
+                    return false;
+                }
 
                 order.OrderCost -= quantity * pizza.PizzaCost;
 
                 await orderRepository.UpdateAsync(order);
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

@@ -44,7 +44,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
 
 
         [HttpPut("async")]
-        [Authorize(Roles = "Admin, User")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> AddPizzaInCartAsync(string pizzaName, int quantity, Guid cartId)
         {
             await cartService.AddPizzaInCartAsync(pizzaName, quantity, cartId);
@@ -65,9 +65,13 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<Order>> DeletePizzaFromCartAsync(string pizzaName, Guid cartId)
         {
-            await cartService.DeletePizzaFromCartAsync(pizzaName, cartId);
+            var res = await cartService.DeletePizzaFromCartAsync(pizzaName, cartId);
+            if(res != false)
+            {
+                return Ok();
+            }
 
-            return Ok();
+            return BadRequest();
         }
     }
 }

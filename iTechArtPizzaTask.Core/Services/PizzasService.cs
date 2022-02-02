@@ -42,6 +42,7 @@ namespace iTechArtPizzaTask.Core.Services
                 await pizzaRepository.DeleteAsync(pizza);
             }
         }
+
         public async Task AddPizzasIngredientsAsync(string pizzaName, string[] ingridientNames)
         {
             Pizza pizza;

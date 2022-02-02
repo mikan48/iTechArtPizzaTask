@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iTechArtPizzaTask.Infrastructure\iTechArtPizzaTask.Infrastructure.csproj" />
+    <ProjectReference Include="..\iTechArtPizzaTask.WebUI\iTechArtPizzaTask.WebUI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -38,8 +38,28 @@ namespace iTechArtPizzaTask.Infrastructure.Repositories
         
         public async Task DeleteAsync(Pizza pizza)
         {
-            context.Pizzas.Remove(context.Pizzas.Where(b => b.PizzaName == pizza.PizzaName).FirstOrDefault());
-            await context.SaveChangesAsync();
+            using var transaction = context.Database.BeginTransaction();
+
+            try
+            {
+                string imagePath = pizza.ImagePath;
+
+                context.Pizzas.Remove(context.Pizzas.Where(b => b.PizzaName == pizza.PizzaName).FirstOrDefault());
+                if(System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                await context.SaveChangesAsync();
+
+                context.SaveChanges();
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine(ex.Message);
+                transaction.Rollback();
+            }
         }
 
         public async Task UpdateAsync(Pizza pizza)

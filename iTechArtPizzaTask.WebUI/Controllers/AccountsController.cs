@@ -95,6 +95,7 @@ namespace iTechArtPizzaTask.WebUI.Controllers
         }
 
         [HttpDelete("/delete")]
+        [Authorize]
         public async Task<ActionResult> DeleteAccountAsync()
         {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
